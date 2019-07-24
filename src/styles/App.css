@@ -1,0 +1,21 @@
+* {
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: #F7F7F7;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    max-width: 960px;
+}
+
+.form__input--hidden {
+    visibility: hidden;
+    opacity: 0;
+}
