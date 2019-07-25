@@ -1,15 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { showDragDropArea, hideDragDropArea } from '../reducers/actions';
+
 
 class Form extends React.Component {
-  constructor() {
-    super();
-    this.formRef = React.createRef();
-    this.dragDropPreventDefaults = this.dragDropPreventDefaults.bind(this);
-  }
-
-  dragDropPreventDefaults(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  constructor(props) {
+    super(props);
   }
 
   render() {
@@ -35,12 +32,40 @@ class Form extends React.Component {
           <textarea></textarea>
         </div>
         <div className='form__row'>
-          <button type="button" className='button-upload'>Прикрпепить файл</button>
+          <button type='button' onClick={this.props.upLoadFiles} className='button-upload'>Прикрпепить файл</button>
         </div>
-        <button>Отправить</button>
+        <button type='button' onClick={this.props.send}>Отправить</button>
+        {this.props.isVisibleDragDropArea &&
+          <div className='drag-drop-area'>
+            drag-drop-area
+          </div>
+        }
       </form>    
     );
   }
 }
 
-export default Form;
+
+Form.propTypes = {
+  isVisibleDragDropArea: PropTypes.bool.isRequired
+}
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    isVisibleDragDropArea: state.visibilityDragDropArea
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    upLoadFiles: () => {
+      dispatch(showDragDropArea());
+    },
+    send: () => {
+      dispatch(hideDragDropArea());
+    }
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form);

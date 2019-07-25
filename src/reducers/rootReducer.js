@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import { toggleDragDropArea } from './toggleDragDropArea';
+import { visibilityDragDropArea } from './visibilityDragDropArea';
 
 const rootReducer = combineReducers({
-    toggleDragDropArea
-  })
+    visibilityDragDropArea
+ })
 
 export default rootReducer
