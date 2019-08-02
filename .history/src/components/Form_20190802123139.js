@@ -14,8 +14,9 @@ class Form extends React.Component {
   }
 
   onDrop(file) {
+    console.log(file);
     this.setState(prevState => ({
-      files: [...prevState.files, file[0]]
+      files: [...prevState.files, file]
     }))
   };
 
@@ -23,6 +24,7 @@ class Form extends React.Component {
     if (this.state.files !== prevState.files) {
       this.props.hideDragDropArea();
     }
+    console.log(this.state.files);
   }
 
   componentDidMount() {
@@ -30,8 +32,12 @@ class Form extends React.Component {
   }
 
   render() {
+   
     const files = this.state.files.map((file, index) =>
-      <li key={index}>{file.name} {file.size} bytes</li>
+      // Делайте так, только если у элементов массива нет заданного ID
+      <li key={index}>
+        {file.name}
+      </li>
     );
     return (
       <form className='form'>
@@ -72,7 +78,7 @@ Form.propTypes = {
   isVisibleDragDropArea: PropTypes.bool.isRequired
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
     isVisibleDragDropArea: state.visibilityDragDropArea
   }

@@ -72,7 +72,7 @@ Form.propTypes = {
   isVisibleDragDropArea: PropTypes.bool.isRequired
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
     isVisibleDragDropArea: state.visibilityDragDropArea
   }
