@@ -2,93 +2,39 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { showDragDropArea, hideDragDropArea } from '../reducers/actions';
-
+import DropZone from './DropZone';
 
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.dropArea = React.createRef();
-    this.formRef = React.createRef();
-    this.highlightDropArea = this.highlightDropArea.bind(this);
-    this.unhighlightDropArea = this.unhighlightDropArea.bind(this);
-    this.handleDrop = this.handleDrop.bind(this);
+    this.state = {
+      files: []
+    };
+    this.onDrop = this.onDrop.bind(this);
+  }
+
+  onDrop(files) {
+    this.setState({files})
+  };
+
+  componentDidUpdate(prevProps) {
+    if (this.state.files !== prevProps.files) {
+      this.props.hideDragDropArea();
+    }
   }
 
   componentDidMount() {
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-      switch (eventName) {
-        case 'dragenter':
-          this.dropArea.current.addEventListener(eventName, (e) => {
-            this.preventDropAreaDefaults(e);
-            this.highlightDropArea();
-          }, false);
-          break;
-        case 'dragover':
-          this.dropArea.current.addEventListener(eventName, (e) => {
-            this.preventDropAreaDefaults(e);
-            this.highlightDropArea();
-          }, false);
-          break;
-        case 'dragleave':
-          this.dropArea.current.addEventListener(eventName, (e) => {
-            this.preventDropAreaDefaults(e);
-            this.unhighlightDropArea();
-          }, false)
-          break;
-        case 'drop':
-          this.dropArea.current.addEventListener(eventName, (e) => {
-            this.preventDropAreaDefaults(e);
-            this.unhighlightDropArea();
-            this.handleDrop(e);
-          }, false)
-          break;  
-        default:
-          return;
-      }
-    });
-  }
-
-  handleDrop(e) {
-    const dt = e.dataTransfer;
-    const files = dt.files;
-    this.handleFiles(files);
-  }
-
-  handleFiles(files) {
-    ([...files]).forEach((file) =>{
-      this.uploadFile(file, this.formRef);
-    });
-  }
-
-  uploadFile(file, formUrl) {
-    console.log(formUrl);
-    const url = formUrl.current;
-    const formData = new FormData();
-    formData.append('file', file);
-    fetch(url, {
-      method: 'POST',
-      body: formData
-    })
-    .then(() => { console.log('ready') })
-    .catch(() => { console.log('error') })
-  }
-
-  highlightDropArea() {
-    this.dropArea.current.classList.add('drop-area--highlight');
-  }
-
-  unhighlightDropArea() {
-    this.dropArea.current.classList.remove('drop-area--highlight');
-  }
-
-  preventDropAreaDefaults(e) {
-    e.preventDefault()
-    e.stopPropagation()
+    this.setState({files: []});
   }
 
   render() {
+    const files = this.state.files.map(file => (
+      <li key={file.name}>
+        {file.name} - {file.size} bytes
+      </li>
+    ));
     return (
-      <form className='form' ref={this.formRef}>
+      <form className='form'>
         <h1 className='form__title'>Отправлялка сообщений</h1>
         <div className='form__row'>
           <span className='field-info'>От кого</span>
@@ -111,10 +57,11 @@ class Form extends React.Component {
         <div className='form__row'>
           <button type='button' onClick={this.props.upLoadFiles} className='button-upload'>Прикрпепить файл</button>
         </div>
-        <button type='button' onClick={this.props.send}>Отправить</button>
-        <div ref={this.dropArea} className={this.props.isVisibleDragDropArea ? 'drop-area' : 'drop-area--hidden'}>
-          <input type='file' id='fileElem' multiple accept='image/*'/>
-        </div>
+        <ul>{files}</ul>
+        <button type='button'>Отправить</button>
+        {this.props.isVisibleDragDropArea &&
+          <DropZone onDrop={this.onDrop} />
+        }
       </form>    
     );
   }
@@ -136,7 +83,7 @@ const mapDispatchToProps = (dispatch) => {
     upLoadFiles: () => {
       dispatch(showDragDropArea());
     },
-    send: () => {
+    hideDragDropArea: () => {
       dispatch(hideDragDropArea());
     }
   }
