@@ -1,16 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { showDragDropArea, hideDragDropArea } from '../reducers/actions';
+import { showDragDropArea, hideDragDropArea } from '../redux/actions';
 import DropZone from './DropZone';
+import ListFiles from './ListFiles';
 
 class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      files: []
+      files: [],
+      nameFrom: '',
+      emailFrom: '',
+      nameTo: '',
+      emailTo: '',
+      messageSubject: 'Моя тема письма',
+      message: ''
     };
     this.onDrop = this.onDrop.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.send = this.send.bind(this);
+  }
+
+  send() {
+    console.log(this.state);
   }
 
   onDrop(file) {
@@ -25,8 +38,13 @@ class Form extends React.Component {
     }
   }
 
-  componentDidMount() {
-  
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
   }
 
   render() {
@@ -37,28 +55,63 @@ class Form extends React.Component {
       <form className='form'>
         <h1 className='form__title'>Отправлялка сообщений</h1>
         <div className='form__row'>
-          <span className='field-info'>От кого</span>
-          <input type='text' placeholder='Имя' className='form__input'/>
-          <input type='email' placeholder='Email' />
+          <span className='field-title'>От кого</span>
+          <input type='text'
+            name='nameFrom'
+            placeholder='Имя'
+            className='form__input'
+            value={this.state.nameFrom}
+            onChange={this.handleInputChange}
+          />
+          <input
+            name='emailFrom'
+            type='email'
+            placeholder='Email'
+            value={this.state.emailFrom}
+            onChange={this.handleInputChange}
+          />
         </div>
         <div className='form__row'>
-          <span className='field-info'>Кому</span>
-          <input type='text' placeholder='Имя' className='form__input'/>
-          <input type='email' placeholder='Email' className='form__input'/>
+          <span className='field-title'>Кому</span>
+          <input
+            name='nameTo'
+            type='text'
+            placeholder='Имя'
+            className='form__input'
+            value={this.state.nameTo}
+            onChange={this.handleInputChange}
+          />
+          <input
+            name='emailTo'
+            type='email'
+            placeholder='Email'
+            className='form__input'
+            value={this.state.emailTo}
+            onChange={this.handleInputChange}
+          />
         </div>
         <div className='form__row'>
-          <span className='field-info'>Тема письма</span>
-          <input type='text' />
+          <span className='field-title'>Тема письма</span>
+          <input
+            name='messageSubject'
+            type='text'
+            value={this.state.messageSubject}
+            onChange={this.handleInputChange}
+          />
         </div>
         <div className='form__row'>
-          <span className='field-info'>Сообщение</span>
-          <textarea></textarea>
+          <span className='field-title'>Сообщение</span>
+          <textarea
+            name='message'
+            value={this.state.message}
+            onChange={this.handleInputChange}
+          />
         </div>
         <div className='form__row'>
           <button type='button' onClick={this.props.upLoadFiles} className='button-upload'>Прикрпепить файл</button>
         </div>
-        <ul>{files}</ul>
-        <button type='button'>Отправить</button>
+        <ListFiles files={this.state.files} />
+        <button type='button' onClick={this.send}>Отправить</button>
         {this.props.isVisibleDragDropArea &&
           <DropZone onDrop={this.onDrop} />
         }
