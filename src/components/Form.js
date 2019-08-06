@@ -27,29 +27,34 @@ class Form extends React.Component {
     console.log(this.state);
   }
 
-  checkOnSize() {
+  checkSizeFilesStorage(nextSize) {
+    const MAX_SIZE_FILE_STORAGE = 20971520;
+    let totalSize = 0;
+    this.state.files.forEach((item) => {
+      totalSize = totalSize + item.size;
+    });
+    totalSize += nextSize;
+    if (totalSize > MAX_SIZE_FILE_STORAGE) return false;
+    return true;
+  }
 
+  converFilesToBase64(file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      console.log(typeof event.target.result);
+    };
+    reader.readAsDataURL(file);
   }
 
   onDrop(files) {
     const file = files[0];
-    // console.log(file);
-    // convert to base64 5242880
-    /* const reader = new FileReader();
-    reader.onload = (event) => {
-      console.log(typeof event.target.result);
-    };
-    reader.readAsDataURL(file); */
-    this.setState(prevState => ({
-      files: [...prevState.files, file]
-    }));
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.files !== prevState.files) {
-      this.props.hideDragDropArea();
+    if (this.checkSizeFilesStorage(file.size)) {
+      this.setState(prevState => ({
+        files: [...prevState.files, file]
+      }));
     }
-  }
+    this.props.hideDragDropArea();
+  }; 
 
   handleInputChange(name, value) {
     this.setState({
@@ -61,15 +66,11 @@ class Form extends React.Component {
     return (
       <form className='form'>
         <h1 className='form__title'>Отправлялка сообщений</h1>
-        <FieldsList fieldsState={this.state} handleInputChange={this.handleInputChange}/>
-        <div className='form__row'>
-          <button type='button' onClick={this.props.upLoadFiles} className='button-upload'>Прикрпепить файл</button>
-        </div>
+        <FieldsList fieldsState={this.state} handleInputChange={this.handleInputChange} />
+        <button type='button' onClick={this.props.upLoadFiles} className='button-upload'>Прикрпепить файл</button>
         <ListFiles files={this.state.files} />
         <button type='button' onClick={this.send}>Отправить</button>
-        {this.props.isVisibleDragDropArea &&
-          <DropZone onDrop={this.onDrop} />
-        }
+        {this.props.isVisibleDragDropArea && <DropZone onDrop={this.onDrop} />}
       </form>    
     );
   }

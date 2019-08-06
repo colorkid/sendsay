@@ -13,7 +13,8 @@ class DropZone extends React.Component {
   }
 
   onDrop(file) {
-    if (file[0].size > 5242880) {
+    const MAX_SIZE_FILE = 5242880;
+    if (file[0].size > MAX_SIZE_FILE) {
       this.setState({tooMuchSizeFile: true});
       return;
     };
