@@ -6,15 +6,33 @@ import Dropzone from 'react-dropzone';
 class DropZone extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      tooMuchSizeFile: false
+    };
+    this.onDrop = this.onDrop.bind(this);
+  }
+
+  onDrop(file) {
+    if (file[0].size > 5242880) {
+      this.setState({tooMuchSizeFile: true});
+      return;
+    };
+    this.setState({tooMuchSizeFile: false});
+    this.props.onDrop(file);
   }
 
 	render() {
+    const acceptFilesMessage = <div>
+      <h1>Бросайте сюда файлы, я ловлю</h1>
+      <p>Мы принимаем файлы</p>
+    </div>;
+    const tooMuchSizeMessage = <p>Слишком большой размер файла. Размер файл не должен превышать 5 Mb.</p>;
 	  return (
-	  	<Dropzone onDrop={this.props.onDrop} noClick noKeyboard>
+	  	<Dropzone onDrop={this.onDrop} noClick noKeyboard>
         {({getRootProps, getInputProps}) => (
           <div {...getRootProps({className: 'dropzone'})}>
             <input {...getInputProps()} />
-            <p>Drag 'n' drop some files here, or click to select files</p>
+            {this.state.tooMuchSizeFile ? tooMuchSizeMessage : acceptFilesMessage}
           </div>
         )}
       </Dropzone>
