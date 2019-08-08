@@ -8,7 +8,10 @@ class ListFiles extends React.Component {
 
   render() {
     const files = this.props.files.map((file, index) =>
-      <li className='list-files__item' key={index}>{file.name} {file.size} bytes</li>
+      <li className='list-files__item' key={index}>
+        <div className='list-files__name'>{file.name}</div>
+        <div onClick={() => this.props.removeFile(index)} className='list-files__remobe-button'>Х</div>
+      </li>
     );
 
     return (
@@ -18,7 +21,8 @@ class ListFiles extends React.Component {
 }
 
 ListFiles.propTypes = {
-  files: PropTypes.array
+  files: PropTypes.array,
+  removeFile: PropTypes.func
 }
 
 export default ListFiles;
