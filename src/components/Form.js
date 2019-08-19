@@ -22,7 +22,6 @@ class Form extends React.Component {
       invalidFields: [],
       messageTooMuchSize: false
     };
-    this.MAX_SIZE_FILE_STORAGE = 20971520;
     this.onDrop = this.onDrop.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.send = this.send.bind(this);
@@ -30,26 +29,33 @@ class Form extends React.Component {
   }
 
   send() {
-    this.validateFields();
-    if (this.state.invalidFields.length > 0) return false;
-    // console.log(this.state);
-  }
-
-  markInvalidField(name) {
-    this.setState({
-      invalidFields: [ ...this.state.invalidFields, name],
+    this.validateFields().then(() => {
+      if (this.state.invalidFields.length > 0) return false;
+      //...request
     });
-    console.log(this.state.invalidFields);
   }
 
-  checkOnEmpty(value, name) {
-    if (value.length <= 0) this.markInvalidField(name);
+  addInvalidField(name) {
+    this.setState(prevState => ({
+      invalidFields: [ ...prevState.invalidFields, name],
+    }));
+  }
+
+  checkOnEmpty(value) {
+    if (value.length <= 0) return false;
+    return true;
   }
 
   validateFields() {
-    Object.keys(this.state.dataForm).forEach((name) => {
-      this.checkOnEmpty(this.state.dataForm[name], name);
-    });
+    return new Promise((resolve) => {
+      this.setState((state) => {return {invalidFields: []}});
+      Object.keys(this.state.dataForm).forEach((name) => {
+        if (!this.checkOnEmpty(this.state.dataForm[name])) {
+          this.addInvalidField(name)
+        }
+      });
+      resolve();
+    })
   }
 
 /*
@@ -68,8 +74,9 @@ class Form extends React.Component {
   }
 
   onDrop(files) {
+    const MAX_FILE_SIZE_STORAGE = 20971520;
     const file = files[0];
-    if ((this.getSizeFilesLetter() + file.size) <= this.MAX_SIZE_FILE_STORAGE) {
+    if ((this.getSizeFilesLetter() + file.size) <= MAX_FILE_SIZE_STORAGE) {
       this.setState(prevState => ({
         files: [...prevState.files, file]
       }));
@@ -110,7 +117,11 @@ class Form extends React.Component {
     return (
       <form className='form'>
         <h1 className='form__title'>Отправлялка сообщений</h1>
-        <FieldsList dataForm={this.state.dataForm} handleInputChange={this.handleInputChange} />
+        <FieldsList
+            dataForm={this.state.dataForm}
+            handleInputChange={this.handleInputChange}
+            invalidFields={this.state.invalidFields}
+        />
         <button type='button' onClick={this.props.upLoadFiles} className='button-upload'>Прикрпепить файл</button>
         <ListFiles files={this.state.files} removeFile={this.removeFile}/>
         {this.state.messageTooMuchSize && 'Вы не можете прикрепить к письму файлов более чем на 20 Mb'}

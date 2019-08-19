@@ -25,7 +25,8 @@ Field.propTypes = {
   placeholder: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.string,
-  handleInputChange: PropTypes.func
+  handleInputChange: PropTypes.func,
+  pattern: PropTypes.string
 };
 
 
