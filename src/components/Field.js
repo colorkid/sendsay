@@ -4,11 +4,6 @@ import PropTypes from 'prop-types';
 class Field extends Component {
   constructor(props) {
     super(props);
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  handleInputChange() {
-    this.props.handleInputChange(event.target.name, event.target.value);
   }
 
   render() {
@@ -19,7 +14,7 @@ class Field extends Component {
         type={this.props.type}
         value={this.props.value}
         placeholder={this.props.placeholder}
-        onChange={this.handleInputChange}
+        onChange={this.props.handleInputChange}
       />
     );
   }
@@ -31,7 +26,7 @@ Field.propTypes = {
   type: PropTypes.string,
   value: PropTypes.string,
   handleInputChange: PropTypes.func
-}
+};
 
 
 export default Field;

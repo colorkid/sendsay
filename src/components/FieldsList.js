@@ -9,20 +9,21 @@ class FieldsList extends Component {
   }
 
   render() {
+    const dataForm = this.props.dataForm;
     return <div className='fields-list'>
       <div className='fields-list__row'>
         <span className='fields-list__title'>От кого</span>
         <Field
           name='nameFrom'
           placeholder='Имя'
-          value={this.props.fieldsState.nameFrom}
+          value={dataForm.nameFrom}
           type='text'
           handleInputChange={this.props.handleInputChange}
         />
         <Field
           name='emailFrom'
           placeholder='Email'
-          value={this.props.fieldsState.emailFrom}
+          value={dataForm.emailFrom}
           type='email'
           handleInputChange={this.props.handleInputChange}
         />
@@ -32,32 +33,32 @@ class FieldsList extends Component {
         <Field
           name='nameTo'
           placeholder='Имя'
-          value={this.props.fieldsState.nameTo}
+          value={dataForm.nameTo}
           type='text'
           handleInputChange={this.props.handleInputChange}
         />
         <Field
           name='emailTo'
           placeholder='Email'
-          value={this.props.fieldsState.emailTo}
+          value={dataForm.emailTo}
           type='email'
           handleInputChange={this.props.handleInputChange}
         />
       </div>
       <div className='fields-list__row'>
-        <span className='fields-list__title'>Кому</span>
+        <span className='fields-list__title'>Тема письма</span>
         <Field
           name='messageSubject'
-          value={this.props.fieldsState.messageSubject}
+          value={dataForm.messageSubject}
           type='text'
           handleInputChange={this.props.handleInputChange}
         />
       </div>
       <div className='fields-list__row'>
-        <span className='fields-list__title'>Кому</span>
+        <span className='fields-list__title'>Сообщение</span>
         <TextArea
           name='message'
-          value={this.props.fieldsState.message}
+          value={dataForm.message}
           handleInputChange={this.props.handleInputChange}
         />
       </div>
@@ -66,8 +67,8 @@ class FieldsList extends Component {
 }
 
 FieldsList.propTypes = {
-  fieldsState: PropTypes.object,
+  dataForm: PropTypes.object,
   handleInputChange: PropTypes.func
-}
+};
 
 export default FieldsList;
