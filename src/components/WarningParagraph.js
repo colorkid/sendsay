@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 const WarningParagraph = (props) => {
   return (
-    <p>{props.subject} не может быть пустым</p>
+    <p>{props.message}</p>
   );
 };
 
 WarningParagraph.propTypes = {
-  subject: PropTypes.string
+  message: PropTypes.string
 };
 
 export default WarningParagraph;

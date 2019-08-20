@@ -1,7 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { showDragDropArea, hideDragDropArea } from '../redux/actions';
 import DropZone from './DropZone';
 import ListFiles from './ListFiles';
 import FieldsList from './FieldsList';
@@ -17,41 +14,59 @@ class Form extends React.Component {
         nameTo: '',
         emailTo: '',
         messageSubject: 'Моя тема письма',
-        message: '',
+        message: ''
       },
-      invalidFields: [],
-      messageTooMuchSize: false
+      emptyFields: [],
+      invalidEmails: [],
+      isTooMuchAllFilesSize: false,
+      isVisibleDragDropArea: false
     };
     this.onDrop = this.onDrop.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.send = this.send.bind(this);
     this.removeFile = this.removeFile.bind(this);
+    this.showDragDropArea = this.showDragDropArea.bind(this);
   }
 
   send() {
-    this.validateFields().then(() => {
-      if (this.state.invalidFields.length > 0) return false;
-      //...request
-    });
+    this._validateFields().then(() => {
+      console.log(this.state.invalidEmails);
+      if (this.state.emptyFields.length > 0) return false;
+      if (this.state.invalidEmails.length > 0) return false;
+    }); //...request
   }
 
-  addInvalidField(name) {
+  _addEmptyField(name) {
     this.setState(prevState => ({
-      invalidFields: [ ...prevState.invalidFields, name],
+      emptyFields: [ ...prevState.emptyFields, name],
     }));
   }
 
-  checkOnEmpty(value) {
+  _checkOnEmpty(value) {
     if (value.length <= 0) return false;
     return true;
   }
 
-  validateFields() {
+  _checkOnValidEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  _addInvalidEmail(name) {
+    console.log(name);
+    this.setState(prevState => ({
+      invalidEmails: [ ...prevState.invalidEmails, name],
+    }));
+  }
+
+  _validateFields() {
+    const emailsForValidation = ['emailFrom', 'emailTo'];
     return new Promise((resolve) => {
-      this.setState((state) => {return {invalidFields: []}});
+      this.setState({emptyFields: [], invalidEmails: []});
       Object.keys(this.state.dataForm).forEach((name) => {
-        if (!this.checkOnEmpty(this.state.dataForm[name])) {
-          this.addInvalidField(name)
+        if (!this._checkOnEmpty(this.state.dataForm[name])) this._addEmptyField(name);
+        if (emailsForValidation.includes(name)) {
+          if (!this._checkOnValidEmail(this.state.dataForm[name])) this._addInvalidEmail(name);
         }
       });
       resolve();
@@ -67,34 +82,34 @@ class Form extends React.Component {
     reader.readAsDataURL(file);
   }*/
 
-  getSizeFilesLetter() {
+  _getSizeFiles() {
     let totalSize = 0;
     this.state.files.forEach(item => totalSize = totalSize + item.size);
     return totalSize;
   }
 
   onDrop(files) {
-    const MAX_FILE_SIZE_STORAGE = 20971520;
+    const MAX_ALL_FILES_SIZE = 20971520;
     const file = files[0];
-    if ((this.getSizeFilesLetter() + file.size) <= MAX_FILE_SIZE_STORAGE) {
+    if ((this._getSizeFiles() + file.size) <= MAX_ALL_FILES_SIZE) {
       this.setState(prevState => ({
         files: [...prevState.files, file]
       }));
     } else {
-      this.showMessageTooMuchSize();
+      this._showMessageTooMuchSize();
     }
-    this.props.hideDragDropArea();
+    this._hideDragDropArea();
   }
 
-  showMessageTooMuchSize() {
-    this.setState({messageTooMuchSize: true});
+  _showMessageTooMuchSize() {
+    this.setState({isTooMuchAllFilesSize: true});
     setTimeout(() => {
-      this.hideMessageTooMuchSize();
+      this._hideMessageTooMuchSize();
     }, 5000)
   }
 
-  hideMessageTooMuchSize() {
-    this.setState({messageTooMuchSize: false});
+  _hideMessageTooMuchSize() {
+    this.setState({isTooMuchAllFilesSize: false});
   }
 
   removeFile(index) {
@@ -113,6 +128,14 @@ class Form extends React.Component {
     this.setState({dataForm})
   }
 
+  showDragDropArea() {
+    this.setState({isVisibleDragDropArea: true});
+  }
+
+  _hideDragDropArea() {
+    this.setState({isVisibleDragDropArea: false});
+  }
+
   render() {
     return (
       <form className='form'>
@@ -120,39 +143,17 @@ class Form extends React.Component {
         <FieldsList
             dataForm={this.state.dataForm}
             handleInputChange={this.handleInputChange}
-            invalidFields={this.state.invalidFields}
+            emptyFields={this.state.emptyFields}
+            invalidEmails={this.state.invalidEmails}
         />
-        <button type='button' onClick={this.props.upLoadFiles} className='button-upload'>Прикрпепить файл</button>
+        <button type='button' onClick={this.showDragDropArea} className='button-upload'>Прикрпепить файл</button>
         <ListFiles files={this.state.files} removeFile={this.removeFile}/>
-        {this.state.messageTooMuchSize && 'Вы не можете прикрепить к письму файлов более чем на 20 Mb'}
+        {this.state.isTooMuchAllFilesSize && 'Вы не можете прикрепить к письму файлов более чем на 20 Mb'}
         <button type='button' onClick={this.send}>Отправить</button>
-        {this.props.isVisibleDragDropArea && <DropZone onDrop={this.onDrop} />}
+        {this.state.isVisibleDragDropArea && <DropZone onDrop={this.onDrop} />}
       </form>    
     );
   }
 }
 
-
-Form.propTypes = {
-  isVisibleDragDropArea: PropTypes.bool.isRequired
-};
-
-const mapStateToProps = (state) => {
-  return {
-    isVisibleDragDropArea: state.visibilityDragDropArea,
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    upLoadFiles: () => {
-      dispatch(showDragDropArea());
-    },
-    hideDragDropArea: () => {
-      dispatch(hideDragDropArea());
-    }
-  }
-};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Form);
+export default Form;

@@ -22,7 +22,7 @@ class FieldsList extends Component {
             type='text'
             handleInputChange={this.props.handleInputChange}
           />
-          {this.props.invalidFields.includes('nameFrom') && <WarningParagraph subject='Поле'/>}
+          {this.props.emptyFields.includes('nameFrom') && <WarningParagraph message='Поле не может быть пустым'/>}
         </div>
         <div className='fields-list__cell'>
           <Field
@@ -32,7 +32,8 @@ class FieldsList extends Component {
             type='email'
             handleInputChange={this.props.handleInputChange}
           />
-          {this.props.invalidFields.includes('emailFrom') && <WarningParagraph subject='Email'/>}
+          {(this.props.emptyFields.includes('emailFrom') && <WarningParagraph message='Email не может быть пустым'/>)
+            || (this.props.invalidEmails.includes('emailFrom') && <WarningParagraph message='Email введен некорректно'/>)}
         </div>
       </div>
       <div className='fields-list__row'>
@@ -45,7 +46,7 @@ class FieldsList extends Component {
             type='text'
             handleInputChange={this.props.handleInputChange}
           />
-          {this.props.invalidFields.includes('nameTo') && <WarningParagraph subject='Поле'/>}
+          {this.props.emptyFields.includes('nameTo') && <WarningParagraph message='Поле не может быть пустым'/>}
         </div>
         <div className='fields-list__cell'>
           <Field
@@ -55,7 +56,8 @@ class FieldsList extends Component {
             type='email'
             handleInputChange={this.props.handleInputChange}
           />
-          {this.props.invalidFields.includes('emailTo') && <WarningParagraph subject='Email'/>}
+          {(this.props.emptyFields.includes('emailFrom') && <WarningParagraph message='Email не может быть пустым'/>)
+            || (this.props.invalidEmails.includes('emailFrom') && <WarningParagraph message='Email введен некорректно'/>)}
         </div>
       </div>
       <div className='fields-list__row'>
@@ -66,7 +68,7 @@ class FieldsList extends Component {
           type='text'
           handleInputChange={this.props.handleInputChange}
         />
-        {this.props.invalidFields.includes('messageSubject') && <WarningParagraph subject='Поле'/>}
+        {this.props.emptyFields.includes('messageSubject') && <WarningParagraph message='Поле не может быть пустым'/>}
       </div>
       <div className='fields-list__row'>
         <span className='fields-list__title'>Сообщение</span>
@@ -75,7 +77,7 @@ class FieldsList extends Component {
           value={dataForm.message}
           handleInputChange={this.props.handleInputChange}
         />
-        {this.props.invalidFields.includes('message') && <WarningParagraph subject='Сообщение'/>}
+        {this.props.emptyFields.includes('message') && <WarningParagraph message='Сообщение не может быть пустым'/>}
       </div>
     </div>
   }
@@ -84,7 +86,8 @@ class FieldsList extends Component {
 FieldsList.propTypes = {
   dataForm: PropTypes.object,
   handleInputChange: PropTypes.func,
-  invalidFields: PropTypes.array
+  emptyFields: PropTypes.array,
+  invalidEmails: PropTypes.array
 };
 
 export default FieldsList;
