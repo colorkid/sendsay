@@ -7,7 +7,6 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      files: [],
       dataForm: {
         nameFrom: '',
         emailFrom: '',
@@ -16,6 +15,7 @@ class Form extends React.Component {
         messageSubject: 'Моя тема письма',
         message: ''
       },
+      files: [],
       emptyFields: [],
       invalidEmails: [],
       isTooMuchAllFilesSize: false,
@@ -29,11 +29,12 @@ class Form extends React.Component {
   }
 
   send() {
-    this._validateFields().then(() => {
-      console.log(this.state.invalidEmails);
+    Promise.all([this._converFilesToBase64(), this._validateFields()]).then((result) => {
       if (this.state.emptyFields.length > 0) return false;
       if (this.state.invalidEmails.length > 0) return false;
-    }); //...request
+      
+      console.log(result[0]);
+    });
   }
 
   _addEmptyField(name) {
@@ -53,7 +54,6 @@ class Form extends React.Component {
   }
 
   _addInvalidEmail(name) {
-    console.log(name);
     this.setState(prevState => ({
       invalidEmails: [ ...prevState.invalidEmails, name],
     }));
@@ -63,7 +63,7 @@ class Form extends React.Component {
     const emailsForValidation = ['emailFrom', 'emailTo'];
     return new Promise((resolve) => {
       this.setState({emptyFields: [], invalidEmails: []});
-      Object.keys(this.state.dataForm).forEach((name) => {
+      Object.keys(this.state.dataForm).forEach(name => {
         if (!this._checkOnEmpty(this.state.dataForm[name])) this._addEmptyField(name);
         if (emailsForValidation.includes(name)) {
           if (!this._checkOnValidEmail(this.state.dataForm[name])) this._addInvalidEmail(name);
@@ -73,16 +73,28 @@ class Form extends React.Component {
     })
   }
 
-/*
-  converFilesToBase64(file) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      console.log(typeof event.target.result);
-    };
-    reader.readAsDataURL(file);
-  }*/
+  _converFilesToBase64() {
+    return new Promise((resolve) => {
+      const promosesFile = this.state.files.map(file => {
+        return this._createBase64Array(file);
+      });
+      Promise.all(promosesFile).then((result) => {
+        resolve(result);
+      });
+    });
+  }
 
-  _getSizeFiles() {
+  _createBase64Array(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+      reader.readAsDataURL(file)
+    });
+  }
+
+  getSizeFiles() {
     let totalSize = 0;
     this.state.files.forEach(item => totalSize = totalSize + item.size);
     return totalSize;
@@ -91,14 +103,14 @@ class Form extends React.Component {
   onDrop(files) {
     const MAX_ALL_FILES_SIZE = 20971520;
     const file = files[0];
-    if ((this._getSizeFiles() + file.size) <= MAX_ALL_FILES_SIZE) {
+    if ((this.getSizeFiles() + file.size) <= MAX_ALL_FILES_SIZE) {
       this.setState(prevState => ({
         files: [...prevState.files, file]
       }));
     } else {
       this._showMessageTooMuchSize();
     }
-    this._hideDragDropArea();
+    this.hideDragDropArea();
   }
 
   _showMessageTooMuchSize() {
@@ -132,7 +144,7 @@ class Form extends React.Component {
     this.setState({isVisibleDragDropArea: true});
   }
 
-  _hideDragDropArea() {
+  hideDragDropArea() {
     this.setState({isVisibleDragDropArea: false});
   }
 
