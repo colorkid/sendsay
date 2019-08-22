@@ -56,8 +56,8 @@ class FieldsList extends Component {
             type='email'
             handleInputChange={this.props.handleInputChange}
           />
-          {(this.props.emptyFields.includes('emailFrom') && <WarningParagraph message='Email не может быть пустым'/>)
-            || (this.props.invalidEmails.includes('emailFrom') && <WarningParagraph message='Email введен некорректно'/>)}
+          {(this.props.emptyFields.includes('emailTo') && <WarningParagraph message='Email не может быть пустым'/>)
+            || (this.props.invalidEmails.includes('emailTo') && <WarningParagraph message='Email введен некорректно'/>)}
         </div>
       </div>
       <div className='fields-list__row'>

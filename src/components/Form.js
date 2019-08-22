@@ -29,19 +29,10 @@ class Form extends React.Component {
   }
 
   send() {
-    /* Promise.all([this._createArrayFiles(), this._validateFields()]).then((result) => {
-      /* if (this.state.emptyFields.length > 0) return false;
-      if (this.state.invalidEmails.length > 0) return false; */
-      this._validateFields().then((res) => {
-        console.log(res);
-      });
-      /* console.log(this.state.emptyFields);
-      console.log(this.state.invalidEmails); */
-    // });
-  }
-
-  _addEmptyField(emptyFields) {
-    this.setState({emptyFields: emptyFields});
+    if (!this._validateFields()) return false;
+    this._createArrayFiles().then((result) => {
+      console.log(result);
+    })
   }
 
   _checkOnEmpty(value) {
@@ -54,34 +45,19 @@ class Form extends React.Component {
     return re.test(String(email).toLowerCase());
   }
 
-  _addInvalidEmail(name) {
-    this.setState(prevState => ({
-      invalidEmails: [ ...prevState.invalidEmails, name],
-    }));
-  }
-
-  addInvalidFields() {
-    if (this.state.emptyFields.length > 0 || this.state.invalidEmails.length) return false;
-    return true;
-  }
-
   _validateFields() {
-    return new Promise((resolve) => {
-      let emptyFields = [];
-      let invalidEmails = [];
-      const emailsForValidation = ['emailFrom', 'emailTo'];
-      Object.keys(this.state.dataForm).forEach(name => {
-        if (!this._checkOnEmpty(this.state.dataForm[name])) emptyFields.push(name);
-        if (emailsForValidation.includes(name)) {
-          if (!this._checkOnValidEmail(this.state.dataForm[name])) invalidEmails.push(name);
-        }
-      });
-      this.setState(
-        {
-          emptyFields: emptyFields,
-          invalidEmails: invalidEmails
-        }, resolve(this.addInvalidFields()));
+    let emptyFields = [];
+    let invalidEmails = [];
+    const emailsForValidation = ['emailFrom', 'emailTo'];
+    Object.keys(this.state.dataForm).forEach(name => {
+      if (!this._checkOnEmpty(this.state.dataForm[name])) emptyFields.push(name);
+      if (emailsForValidation.includes(name)) {
+        if (!this._checkOnValidEmail(this.state.dataForm[name])) invalidEmails.push(name);
+      }
     });
+    this.setState({emptyFields: emptyFields, invalidEmails: invalidEmails});
+    if (emptyFields.length > 0 || invalidEmails.length > 0) return false;
+    return true;
   }
 
   _createArrayFiles() {
@@ -89,7 +65,7 @@ class Form extends React.Component {
       const promisesFile = this.state.files.map(file => {
         return this._converFileToBase64(file);
       });
-      Promise.all(promisesFile).then((result) => {
+      Promise.all(promisesFile).then(result => {
         resolve(result);
       });
     });
@@ -99,12 +75,7 @@ class Form extends React.Component {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = (event) => {
-        resolve({
-          name: file.name,
-          result: event.target.result,
-          encoding: 'base64'
-          }
-        );
+        resolve({name: file.name, result: event.target.result, encoding: 'base64'});
       };
       reader.readAsDataURL(file)
     });
@@ -149,8 +120,7 @@ class Form extends React.Component {
   }
 
   handleInputChange(event) {
-    const name = event.target.name;
-    const value = event.target.value;
+    const {name, value} = event.target;
     const dataForm = {...this.state.dataForm};
     dataForm[name] = value;
     this.setState({dataForm})
