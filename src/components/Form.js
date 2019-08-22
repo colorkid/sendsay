@@ -29,18 +29,19 @@ class Form extends React.Component {
   }
 
   send() {
-    Promise.all([this._converFilesToBase64(), this._validateFields()]).then((result) => {
-      if (this.state.emptyFields.length > 0) return false;
-      if (this.state.invalidEmails.length > 0) return false;
-      
-      console.log(result[0]);
-    });
+    /* Promise.all([this._createArrayFiles(), this._validateFields()]).then((result) => {
+      /* if (this.state.emptyFields.length > 0) return false;
+      if (this.state.invalidEmails.length > 0) return false; */
+      this._validateFields().then((res) => {
+        console.log(res);
+      });
+      /* console.log(this.state.emptyFields);
+      console.log(this.state.invalidEmails); */
+    // });
   }
 
-  _addEmptyField(name) {
-    this.setState(prevState => ({
-      emptyFields: [ ...prevState.emptyFields, name],
-    }));
+  _addEmptyField(emptyFields) {
+    this.setState({emptyFields: emptyFields});
   }
 
   _checkOnEmpty(value) {
@@ -59,36 +60,51 @@ class Form extends React.Component {
     }));
   }
 
-  _validateFields() {
-    const emailsForValidation = ['emailFrom', 'emailTo'];
-    return new Promise((resolve) => {
-      this.setState({emptyFields: [], invalidEmails: []});
-      Object.keys(this.state.dataForm).forEach(name => {
-        if (!this._checkOnEmpty(this.state.dataForm[name])) this._addEmptyField(name);
-        if (emailsForValidation.includes(name)) {
-          if (!this._checkOnValidEmail(this.state.dataForm[name])) this._addInvalidEmail(name);
-        }
-      });
-      resolve();
-    })
+  addInvalidFields() {
+    if (this.state.emptyFields.length > 0 || this.state.invalidEmails.length) return false;
+    return true;
   }
 
-  _converFilesToBase64() {
+  _validateFields() {
     return new Promise((resolve) => {
-      const promosesFile = this.state.files.map(file => {
-        return this._createBase64Array(file);
+      let emptyFields = [];
+      let invalidEmails = [];
+      const emailsForValidation = ['emailFrom', 'emailTo'];
+      Object.keys(this.state.dataForm).forEach(name => {
+        if (!this._checkOnEmpty(this.state.dataForm[name])) emptyFields.push(name);
+        if (emailsForValidation.includes(name)) {
+          if (!this._checkOnValidEmail(this.state.dataForm[name])) invalidEmails.push(name);
+        }
       });
-      Promise.all(promosesFile).then((result) => {
+      this.setState(
+        {
+          emptyFields: emptyFields,
+          invalidEmails: invalidEmails
+        }, resolve(this.addInvalidFields()));
+    });
+  }
+
+  _createArrayFiles() {
+    return new Promise((resolve) => {
+      const promisesFile = this.state.files.map(file => {
+        return this._converFileToBase64(file);
+      });
+      Promise.all(promisesFile).then((result) => {
         resolve(result);
       });
     });
   }
 
-  _createBase64Array(file) {
+  _converFileToBase64(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = (event) => {
-        resolve(event.target.result);
+        resolve({
+          name: file.name,
+          result: event.target.result,
+          encoding: 'base64'
+          }
+        );
       };
       reader.readAsDataURL(file)
     });
