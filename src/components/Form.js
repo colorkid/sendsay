@@ -30,14 +30,13 @@ class Form extends React.Component {
 
   send() {
     if (!this._validateFields()) return false;
-    this._createArrayFiles().then((result) => {
+    this._createConvertedFiles().then((result) => {
       console.log(result);
     })
   }
 
   _checkOnEmpty(value) {
-    if (value.length <= 0) return false;
-    return true;
+    return value.length > 0;
   }
 
   _checkOnValidEmail(email) {
@@ -56,14 +55,13 @@ class Form extends React.Component {
       }
     });
     this.setState({emptyFields: emptyFields, invalidEmails: invalidEmails});
-    if (emptyFields.length > 0 || invalidEmails.length > 0) return false;
-    return true;
+    return !(emptyFields.length > 0 || invalidEmails.length > 0);
   }
 
-  _createArrayFiles() {
+  _createConvertedFiles() {
     return new Promise((resolve) => {
       const promisesFile = this.state.files.map(file => {
-        return this._converFileToBase64(file);
+        return this._convertFileToBase64(file);
       });
       Promise.all(promisesFile).then(result => {
         resolve(result);
@@ -71,7 +69,7 @@ class Form extends React.Component {
     });
   }
 
-  _converFileToBase64(file) {
+  _convertFileToBase64(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = (event) => {
