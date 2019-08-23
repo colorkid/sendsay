@@ -1,22 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from 'prop-types';
 
-class TextArea extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <textarea
-        name={this.props.name}
-        className='textarea'
-        value={this.props.value}
-        onChange={this.props.handleInputChange}
-      />
-    );
-  }
-}
+const TextArea = React.memo(function Field(props) {
+  return (
+    <textarea
+      name={props.name}
+      className='textarea'
+      value={props.value}
+      onChange={props.handleInputChange}
+    />
+  );
+});
 
 TextArea.propTypes = {
   name: PropTypes.string,

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WarningParagraph = (props) => {
+const WarningParagraph = React.memo(function Field(props) {
   return (
     <p>{props.message}</p>
   );
-};
+});
 
 WarningParagraph.propTypes = {
   message: PropTypes.string
