@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import Form from './Form';
+import React, {Component} from 'react';
+import Form from './Form/Form';
+import Messages from './Messagess/Messages';
 import '../styles/App.css';
 
 class App extends Component {
@@ -9,9 +10,8 @@ class App extends Component {
         <div className='logo'>
           <img src='./img/LOGO.svg' alt='logo' className='logo__img'/>
         </div>
-        <Form />
-        <h2>Отправка сообщения</h2>
-        <div>Сообщения</div>
+        <Form/>
+        <Messages/>
       </div>
     );
   }

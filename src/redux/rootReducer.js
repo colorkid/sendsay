@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import { visibilityDragDropArea } from './visibilityDragDropArea';
+import { messagesReducer } from './messagesReducer';
 
 const rootReducer = combineReducers({
-   visibilityDragDropArea,
-})
+   messages: messagesReducer
+});
 
 export default rootReducer

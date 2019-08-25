@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import Field from "./Field";
 import TextArea from "./TextArea";
-import WarningParagraph from "./WarningParagraph";
+import WarningParagraph from "../Shared/WarningParagraph";
 
 const FieldsList = React.memo(function FieldsList(props) {
   const dataForm = props.dataForm;

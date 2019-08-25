@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import File from './file';
+import File from './File';
 
 const ListFiles = React.memo(function ListFiles(props) {
   return props.files.map((file, index) => {
