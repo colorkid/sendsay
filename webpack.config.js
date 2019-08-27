@@ -1,5 +1,5 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
@@ -17,13 +17,9 @@ module.exports = {
         use: ["babel-loader"]
       },
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      },
-      {
         test: /\.s[ac]ss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader']
-      },
+      }
     ]
   },
   plugins: [
@@ -31,7 +27,7 @@ module.exports = {
       template: "./src/index.html"
     }),
     new CopyWebpackPlugin([{
-      from: './src/img',
+      from: './src/resources/img',
       to: './img'
     }])
   ]

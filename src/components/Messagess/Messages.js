@@ -5,7 +5,7 @@ import MessagesList from './MessagesList';
 
 const Messages = (props) => {
   return (
-    <div className='messages'>
+    <div className='messages main__block'>
       <h2>Отправка сообщения</h2>
       {props.messages.length <= 0 ? <p>Сообщения ещё не отправлялись</p> : <MessagesList messages={props.messages}/>}
     </div>

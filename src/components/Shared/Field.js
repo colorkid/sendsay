@@ -2,10 +2,11 @@ import React from "react";
 import PropTypes from 'prop-types';
 
 const Field = React.memo(function Field(props) {
+  const className = props.modificator ? `input input--${props.modificator}` : 'input';
   return (
     <input
       name={props.name}
-      className='input'
+      className={className}
       type={props.type}
       value={props.value}
       placeholder={props.placeholder}
@@ -19,7 +20,8 @@ Field.propTypes = {
   placeholder: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.string,
-  handleInputChange: PropTypes.func
+  handleInputChange: PropTypes.func,
+  modificator: PropTypes.string
 };
 
 export default Field;

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Field from "../Shared/Field";
 import TextArea from "../Shared/TextArea";
 import WarningParagraph from "../Shared/WarningParagraph";
-import FieldTitle from "../Shared/FieldTitle";
 
 const FieldsList = React.memo(function FieldsList(props) {
   const dataForm = props.dataForm;
@@ -11,13 +10,14 @@ const FieldsList = React.memo(function FieldsList(props) {
     <div className='fields-list'>
       <div className='fields-list__row'>
         <div className='fields-list__cell'>
-          <FieldTitle name='fields-list__title' title='От кого'/>
+          <span className='fields-list__title'>От кого</span>
           <Field
             name='nameFrom'
             placeholder='Имя'
             value={dataForm.nameFrom}
             type='text'
             handleInputChange={props.handleInputChange}
+            modificator='first'
           />
           {props.emptyFields.includes('nameFrom') && <WarningParagraph message='Поле не может быть пустым'/>}
         </div>
@@ -28,6 +28,7 @@ const FieldsList = React.memo(function FieldsList(props) {
             value={dataForm.emailFrom}
             type='email'
             handleInputChange={props.handleInputChange}
+            modificator='second'
           />
           {(props.emptyFields.includes('emailFrom') && <WarningParagraph message='Email не может быть пустым'/>)
           || (props.invalidEmails.includes('emailFrom') && <WarningParagraph message='Email введен некорректно'/>)}
@@ -35,13 +36,14 @@ const FieldsList = React.memo(function FieldsList(props) {
       </div>
       <div className='fields-list__row'>
         <div className='fields-list__cell'>
-          <FieldTitle name='fields-list__title' title='Кому'/>
+          <span className='fields-list__title'>Кому</span>
           <Field
             name='nameTo'
             placeholder='Имя'
             value={dataForm.nameTo}
             type='text'
             handleInputChange={props.handleInputChange}
+            modificator='first'
           />
           {props.emptyFields.includes('nameTo') && <WarningParagraph message='Поле не может быть пустым'/>}
         </div>
@@ -52,13 +54,14 @@ const FieldsList = React.memo(function FieldsList(props) {
             value={dataForm.emailTo}
             type='email'
             handleInputChange={props.handleInputChange}
+            modificator='second'
           />
           {(props.emptyFields.includes('emailTo') && <WarningParagraph message='Email не может быть пустым'/>)
           || (props.invalidEmails.includes('emailTo') && <WarningParagraph message='Email введен некорректно'/>)}
         </div>
       </div>
       <div className='fields-list__row'>
-        <FieldTitle name='fields-list__title' title='Тема письма'/>
+        <span className='fields-list__title'>Тема письма</span>
         <Field
           name='messageSubject'
           value={dataForm.messageSubject}
@@ -68,7 +71,7 @@ const FieldsList = React.memo(function FieldsList(props) {
         {props.emptyFields.includes('messageSubject') && <WarningParagraph message='Поле не может быть пустым'/>}
       </div>
       <div className='fields-list__row'>
-        <FieldTitle name='fields-list__title' title='Сообщение'/>
+        <span className='fields-list__title'>Сообщение</span>
         <TextArea
           name='message'
           value={dataForm.message}

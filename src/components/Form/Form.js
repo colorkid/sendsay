@@ -195,7 +195,7 @@ class Form extends React.Component {
 
   render() {
     return (
-      <form className='form'>
+      <form className='form main__block'>
         <h1 className='form__title'>Отправлялка сообщений</h1>
         <FieldsList
             dataForm={this.state.dataForm}
