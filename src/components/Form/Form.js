@@ -5,6 +5,7 @@ import DropZone from './DropZone';
 import ListFiles from './ListFiles';
 import FieldsList from './FieldsList';
 import {addNewMessage, updateMessage} from "../../redux/actions";
+import 'sendsay-api';
 
 class Form extends React.Component {
   constructor(props) {

@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import Field from "./Field";
-import TextArea from "./TextArea";
+import Field from "../Shared/Field";
+import TextArea from "../Shared/TextArea";
 import WarningParagraph from "../Shared/WarningParagraph";
+import FieldTitle from "../Shared/FieldTitle";
 
 const FieldsList = React.memo(function FieldsList(props) {
   const dataForm = props.dataForm;
@@ -10,7 +11,7 @@ const FieldsList = React.memo(function FieldsList(props) {
     <div className='fields-list'>
       <div className='fields-list__row'>
         <div className='fields-list__cell'>
-          <span className='fields-list__title'>От кого</span>
+          <FieldTitle name='fields-list__title' title='От кого'/>
           <Field
             name='nameFrom'
             placeholder='Имя'
@@ -34,7 +35,7 @@ const FieldsList = React.memo(function FieldsList(props) {
       </div>
       <div className='fields-list__row'>
         <div className='fields-list__cell'>
-          <span className='fields-list__title'>Кому</span>
+          <FieldTitle name='fields-list__title' title='Кому'/>
           <Field
             name='nameTo'
             placeholder='Имя'
@@ -57,7 +58,7 @@ const FieldsList = React.memo(function FieldsList(props) {
         </div>
       </div>
       <div className='fields-list__row'>
-        <span className='fields-list__title'>Тема письма</span>
+        <FieldTitle name='fields-list__title' title='Тема письма'/>
         <Field
           name='messageSubject'
           value={dataForm.messageSubject}
@@ -67,7 +68,7 @@ const FieldsList = React.memo(function FieldsList(props) {
         {props.emptyFields.includes('messageSubject') && <WarningParagraph message='Поле не может быть пустым'/>}
       </div>
       <div className='fields-list__row'>
-        <span className='fields-list__title'>Сообщение</span>
+        <FieldTitle name='fields-list__title' title='Сообщение'/>
         <TextArea
           name='message'
           value={dataForm.message}

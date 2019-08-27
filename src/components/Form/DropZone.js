@@ -21,7 +21,7 @@ class DropZone extends React.Component {
 
 	render() {
     const acceptFilesMessage = <div>
-      <h1>Бросайте сюда файлы, я ловлю</h1>
+      <h2>Бросайте сюда файлы, я ловлю</h2>
       <p>Мы принимаем файлы</p>
     </div>;
     const tooMuchSizeMessage = <p>Слишком большой размер файла. Размер файл не должен превышать 5 Mb.</p>;
