@@ -203,7 +203,7 @@ class Form extends React.Component {
             emptyFields={this.state.emptyFields}
             invalidEmails={this.state.invalidEmails}
         />
-        <ListFiles files={this.state.files} removeFile={this.removeFile}/>
+        {this.state.files.length > 0 && <ListFiles files={this.state.files} removeFile={this.removeFile}/>}
         {this.state.isTooMuchAllFilesSize && 'Вы не можете прикрепить к письму файлов более чем на 20 Mb'}
         <div className='form__footer'>
           <button type='button' onClick={this.showDragDropArea} className='button-upload'>Прикрпепить файл</button>

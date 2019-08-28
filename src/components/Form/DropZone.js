@@ -20,9 +20,9 @@ class DropZone extends React.Component {
   }
 
 	render() {
-    const acceptFilesMessage = <div>
-      <h2>Бросайте сюда файлы, я ловлю</h2>
-      <p>Мы принимаем файлы</p>
+    const acceptFilesMessage = <div className='dropzone__message'>
+      <h2 className='dropzone__title'>Бросайте сюда файлы, я ловлю</h2>
+      <p className='dropzone__paragraph'>Мы принимаем картинки (jpg, png, gif), офисные файлы (doc, xls, pdf) и zip-архивы. Размеры файла до 5 МБ</p>
     </div>;
     const tooMuchSizeMessage = <p>Слишком большой размер файла. Размер файл не должен превышать 5 Mb.</p>;
 	  return (

@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <div className='main'>
         <div className='logo main__block'>
-          <img src='../img/LOGO.svg' alt='logo' className='logo__img'/>
+          <img src='../img/logo.svg' alt='logo' className='logo__img'/>
         </div>
         <Form/>
         <Messages/>
