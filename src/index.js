@@ -12,4 +12,4 @@ ReactDom.render(
     <App />
   </Provider>,
   document.getElementById('root')
-)
+);

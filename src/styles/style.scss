@@ -1,8 +1,19 @@
+$globalBackgroundColor: rgba(247, 247, 247, 1);
 $primaryTextColor: rgba(0, 0, 0, 1);
 $secondTextColor: rgba(0, 0, 0, 0.4);
+$accentTextColor: rgba(255, 102, 102, 1);
+$accentColor: rgba(0, 85, 251, 1);
+$accentBorderColor: rgba(69, 165, 255, 1);
 $fieldTitleColor:rgba(0, 0, 0, 0.6);
 $borderColor: rgba(221, 221, 221, 1);
 $globalBorder: 5px;
+$buttonGradient: linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;
+$buttonHoverGradient: linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
+  linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;
+$buttonActiveGradient: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+  linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;
+$buttonDisabledGradient: linear-gradient(0deg, #C4C4C4, #C4C4C4), linear-gradient(180deg, #45A6FF 0%, #0055FB 100%);
+$formShadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 
 * {
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
@@ -21,6 +32,7 @@ h1, h2 {
   padding: 0 10px;
   border: 1px solid $borderColor;
   font-size: 18px;
+  border-radius: $globalBorder;
 
   &--first {
     border-radius: $globalBorder 0 0 $globalBorder;
@@ -30,6 +42,12 @@ h1, h2 {
     border-radius: 0 $globalBorder $globalBorder 0;
     border-left: 0;
   }
+
+  &:focus {
+    &::placeholder {
+      opacity: 0;
+    }
+  }
 }
 
 .textarea {
@@ -38,6 +56,8 @@ h1, h2 {
   padding: 10px;
   border: 1px solid $borderColor;
   font-size: 16px;
+  line-height: 1.5;
+  border-radius: $globalBorder;
 }
 
 ::placeholder {
@@ -48,8 +68,58 @@ body {
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  background-color: #E5E5E5;
+  background-color: $globalBackgroundColor;
   color: $primaryTextColor;
+}
+
+.button-upload {
+  height: 30px;
+  color: $accentColor;
+  font-size: 16px;
+  background-color: transparent;
+  border-radius: $globalBorder;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding-left: 20px;
+  line-height: 50%;
+  background-size: 16px;
+  background-position: 0 8px;
+  background-image: url('../resources/img/clip.svg');
+  background-repeat: no-repeat;
+
+  &:focus {
+    border-color: $accentBorderColor;
+  }
+}
+
+.button-send {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 40px;
+  font-size: 18px;
+  color: #FFFFFF;
+  border: 0;
+  background: $buttonGradient;
+  border-radius: $globalBorder;
+  cursor: pointer;
+
+  &:hover {
+    background: $buttonHoverGradient;
+  }
+
+  &:active {
+    background: $buttonActiveGradient;
+  }
+
+  &:disabled {
+    background: $buttonDisabledGradient;
+  }
+}
+
+.warning-paragraph {
+  color: $accentTextColor;
 }
 
 .main {
@@ -68,18 +138,25 @@ body {
   position: relative;
   width: 100%;
   max-width: 800px;
-  height: 630px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-content: flex-start;
   padding: 30px;
   background: #FFFFFF;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: $formShadow;
   border-radius: $globalBorder;
 
   &__title {
     font-size: 30px;
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    height: 85px;
+    justify-content: space-between;
+    margin: 5px auto 0 0;
   }
 }
 
@@ -115,17 +192,25 @@ body {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    margin-top: 20px;
+    padding-top: 25px;
+    position: relative;
   }
 
   &__cell {
     display: flex;
     flex-wrap: wrap;
-    align-content: flex-end;
     width: 50%;
   }
 
   &__title {
     width: 100%;
+    position: absolute;
+    top: -2px;
     color: $fieldTitleColor;
+  }
+
+  &__warning-paragraph {
+    margin: 5px 0 0 10px;
   }
 }

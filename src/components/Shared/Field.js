@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 
 const Field = React.memo(function Field(props) {
-  const className = props.modificator ? `input input--${props.modificator}` : 'input';
+  const className = props.mixClass ? `input input--${props.mixClass}` : 'input';
   return (
     <input
       name={props.name}
@@ -21,7 +21,7 @@ Field.propTypes = {
   type: PropTypes.string,
   value: PropTypes.string,
   handleInputChange: PropTypes.func,
-  modificator: PropTypes.string
+  mixClass: PropTypes.string
 };
 
 export default Field;

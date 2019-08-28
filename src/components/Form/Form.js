@@ -203,11 +203,13 @@ class Form extends React.Component {
             emptyFields={this.state.emptyFields}
             invalidEmails={this.state.invalidEmails}
         />
-        <button type='button' onClick={this.showDragDropArea} className='button-upload'>Прикрпепить файл</button>
         <ListFiles files={this.state.files} removeFile={this.removeFile}/>
         {this.state.isTooMuchAllFilesSize && 'Вы не можете прикрепить к письму файлов более чем на 20 Mb'}
-        <button type='button' onClick={this.send}>Отправить</button>
-        {this.state.isVisibleDragDropArea && <DropZone onDrop={this.onDrop} />}
+        <div className='form__footer'>
+          <button type='button' onClick={this.showDragDropArea} className='button-upload'>Прикрпепить файл</button>
+          <button type='button' onClick={this.send} className='button-send'>Отправить</button>
+        </div>
+        {this.state.isVisibleDragDropArea && <DropZone onDrop={this.onDrop}/>}
       </form>    
     );
   }
