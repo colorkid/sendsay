@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import DropZone from './DropZone';
-import ListFiles from './ListFiles';
+import FilesList from './FilesList';
 import FieldsList from './FieldsList';
 import {addNewMessage, updateMessage} from "../../redux/actions";
 import 'sendsay-api';
@@ -30,6 +30,7 @@ class Form extends React.Component {
     this.send = this.send.bind(this);
     this.removeFile = this.removeFile.bind(this);
     this.showDragDropArea = this.showDragDropArea.bind(this);
+    this.hideDragDropArea = this.hideDragDropArea.bind(this);
   }
 
   componentDidMount() {
@@ -185,7 +186,8 @@ class Form extends React.Component {
     this.setState({dataForm})
   }
 
-  showDragDropArea() {
+  showDragDropArea(e) {
+    e.stopPropagation();
     this.setState({isVisibleDragDropArea: true});
   }
 
@@ -194,8 +196,9 @@ class Form extends React.Component {
   }
 
   render() {
+    const className = this.props.mixClass ? `form ${this.props.mixClass}` : 'form';
     return (
-      <form className='form main__block'>
+      <form className={className}>
         <h1 className='form__title'>Отправлялка сообщений</h1>
         <FieldsList
             dataForm={this.state.dataForm}
@@ -203,13 +206,14 @@ class Form extends React.Component {
             emptyFields={this.state.emptyFields}
             invalidEmails={this.state.invalidEmails}
         />
-        {this.state.files.length > 0 && <ListFiles files={this.state.files} removeFile={this.removeFile}/>}
+        {this.state.files.length > 0
+          && <FilesList mixClass='form__files-list' files={this.state.files} removeFile={this.removeFile}/>}
         {this.state.isTooMuchAllFilesSize && 'Вы не можете прикрепить к письму файлов более чем на 20 Mb'}
         <div className='form__footer'>
           <button type='button' onClick={this.showDragDropArea} className='button-upload'>Прикрпепить файл</button>
           <button type='button' onClick={this.send} className='button-send'>Отправить</button>
         </div>
-        {this.state.isVisibleDragDropArea && <DropZone onDrop={this.onDrop}/>}
+        {this.state.isVisibleDragDropArea && <DropZone hideDragDropArea={this.hideDragDropArea} onDrop={this.onDrop}/>}
       </form>    
     );
   }
@@ -217,7 +221,8 @@ class Form extends React.Component {
 
 Form.propTypes = {
   addNewMessage: PropTypes.func,
-  updateMessage: PropTypes.func
+  updateMessage: PropTypes.func,
+  mixClass: PropTypes.string
 };
 
 const mapDispatchToProps = (dispatch) => {

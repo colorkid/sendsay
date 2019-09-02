@@ -1,19 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import MessagesList from './MessagesList';
+import MessagesContainer from './MessagesContainer';
 
 const Messages = (props) => {
+  const className = props.mixClass ? `messages ${props.mixClass}` : 'messages';
   return (
-    <div className='messages main__block'>
-      <h2>Отправка сообщения</h2>
-      {props.messages.length <= 0 ? <p>Сообщения ещё не отправлялись</p> : <MessagesList messages={props.messages}/>}
+    <div className={className}>
+      <h2>Отправленные сообщения</h2>
+      {props.messages.length <= 0 ? <p>Сообщения ещё не отправлялись</p> : <MessagesContainer messages={props.messages}/>}
     </div>
   )
 };
 
 Messages.propTypes = {
-  messages: PropTypes.array
+  messages: PropTypes.array,
+  mixClass: PropTypes.string
 };
 
 const mapStateToProps = (state) => {

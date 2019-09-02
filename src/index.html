@@ -15,23 +15,3 @@
 </body>
 
 </html>
-
-
-createPopup: (page) =>
-      page = page or "ClipperLogin.action"
-      url = "https://#{context.getBootstrapProfile().settings.serviceHost}/#{page}?wck=OL365&pubKey=#{encodeURIComponent(@publicKey)}"
-      cookies.delete('clipper-ol365', '/', null)
-      @win = new dialog()
-      @win.open(url)
-      .then(() =>
-        @requestInterval = setInterval(@updateAuthStatus, 500)
-        if not @win.isClosed() && Evernote.evernoteContext.isMobile()
-          window.addEventListener('focus', () =>
-            @win.close()
-          )
-      )
-      .catch((error) =>
-        @options.fail(error)
-      )
-
-      

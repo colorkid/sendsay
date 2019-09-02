@@ -1,22 +1,10 @@
-$globalBackgroundColor: rgba(247, 247, 247, 1);
-$primaryTextColor: rgba(0, 0, 0, 1);
 $secondTextColor: rgba(0, 0, 0, 0.4);
 $accentTextColor: rgba(255, 102, 102, 1);
-$accentColor: rgba(0, 85, 251, 1);
-$accentBorderColor: rgba(69, 165, 255, 1);
-$fieldTitleColor:rgba(0, 0, 0, 0.6);
 $borderColor: rgba(221, 221, 221, 1);
 $globalBorder: 5px;
-$buttonGradient: linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;
-$buttonHoverGradient: linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
-  linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;
-$buttonActiveGradient: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
-  linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;
-$buttonDisabledGradient: linear-gradient(0deg, #C4C4C4, #C4C4C4), linear-gradient(180deg, #45A6FF 0%, #0055FB 100%);
-$formShadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 
 * {
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
   box-sizing: border-box;
 }
 
@@ -67,14 +55,14 @@ h1, h2 {
 body {
   display: flex;
   justify-content: center;
-  margin: 0 auto;
-  background-color: $globalBackgroundColor;
-  color: $primaryTextColor;
+  margin: 0 20px;
+  background-color: rgba(247, 247, 247, 1);
+  color: rgba(0, 0, 0, 1);
 }
 
 .button-upload {
   height: 30px;
-  color: $accentColor;
+  color: rgba(0, 85, 251, 1);
   font-size: 16px;
   background-color: transparent;
   border-radius: $globalBorder;
@@ -88,7 +76,7 @@ body {
   background-repeat: no-repeat;
 
   &:focus {
-    border-color: $accentBorderColor;
+    border-color: rgba(69, 165, 255, 1);
   }
 }
 
@@ -101,20 +89,22 @@ body {
   font-size: 18px;
   color: #FFFFFF;
   border: 0;
-  background: $buttonGradient;
+  background: linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;;
   border-radius: $globalBorder;
   cursor: pointer;
 
   &:hover {
-    background: $buttonHoverGradient;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
+      linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;;
   }
 
   &:active {
-    background: $buttonActiveGradient;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+      linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;
   }
 
   &:disabled {
-    background: $buttonDisabledGradient;
+    background: linear-gradient(0deg, #C4C4C4, #C4C4C4), linear-gradient(180deg, #45A6FF 0%, #0055FB 100%);
   }
 }
 
@@ -123,6 +113,7 @@ body {
 }
 
 .main {
+  max-width: 800px;
   padding: 20px 0;
 
   &__block {
@@ -137,18 +128,21 @@ body {
 .form {
   position: relative;
   width: 100%;
-  max-width: 800px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-content: flex-start;
   padding: 30px;
   background: #FFFFFF;
-  box-shadow: $formShadow;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: $globalBorder;
 
   &__title {
     font-size: 30px;
+  }
+
+  &__files-list {
+    margin: 5px 0 0 0;
   }
 
   &__footer {
@@ -191,8 +185,7 @@ body {
   }
 }
 
-.list-files {
-  margin: 0;
+.files-list {
   padding: 0;
   width: 100%;
   display: flex;
@@ -213,6 +206,13 @@ body {
     background-position: 10px 50%;
     background-size: 32px auto;
     background-repeat: no-repeat;
+  }
+
+  &__name {
+    max-width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   &__remove-button {
@@ -250,10 +250,183 @@ body {
     width: 100%;
     position: absolute;
     top: -2px;
-    color: $fieldTitleColor;
+    color: rgba(0, 0, 0, 0.6);
   }
 
   &__warning-paragraph {
     margin: 5px 0 0 10px;
+  }
+}
+
+.messages {
+  padding: 20px 30px;
+}
+
+.messages-container {
+
+  &__head {
+    display: flex;
+    padding: 20px 0 10px 0;
+    border-bottom: 1px solid $borderColor;
+  }
+
+  &__name-column {
+    color: $secondTextColor;
+
+    &--date {
+      width: 15%;
+    }
+
+    &--subject {
+      width: 70%;
+    }
+
+    &--status {
+      width: 15%;
+      text-align: right;
+    }
+  }
+}
+
+.messages-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  &__item {
+    display: flex;
+    line-height: 35px;
+  }
+
+  &__date {
+    width: 15%;
+  }
+
+  &__subject {
+    width: 70%;
+    max-width: 520px;
+    height: 35px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__status {
+    width: 15%;
+    text-align: right;
+  }
+}
+
+.messages-status {
+
+  &--success {
+    color: rgba(3, 161, 0, 1);
+  }
+
+  &--error {
+    color: $accentTextColor;
+  }
+
+  &--loading {
+    color: $secondTextColor;
+  }
+}
+
+@media (max-width: 768px) {
+
+  body {
+    margin: 0;
+  }
+
+  .logo {
+    margin: 0;
+    text-align: center;
+  }
+
+  .form {
+    border-radius: 0;
+
+    &__footer {
+      margin-top: 20px;
+      width: 100%;
+
+      .button-send {
+        width: 100%;
+      }
+
+      .button-upload {
+        width: 170px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .files-list {
+
+    &__item {
+      width: 100%;
+    }
+
+    &__name {
+      max-width: 260px;
+    }
+  }
+
+  .fields-list {
+
+    &__cell {
+      width: 100%;
+      margin: 5px 0;
+
+      .input {
+        border: 1px solid $borderColor;
+        border-radius: 5px;
+      }
+    }
+  }
+
+  .messages-container {
+
+    &__head {
+      border: 0;
+      text-align: center;
+    }
+  }
+
+  .messages-list {
+
+    &__item {
+      flex-wrap: wrap;
+      justify-content: center;
+      border-top: 1px solid $borderColor;
+      text-align: center;
+    }
+
+    &__date {
+      width: 100%;
+    }
+
+    &__status {
+      width: 100%;
+      text-align: center;
+    }
+
+    &__subject {
+      width: 100%;
+      white-space: normal;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  h1, h2 {
+    font-size: 22px;
+  }
+
+  .files-list {
+
+    &__name {
+      max-width: 100px;
+    }
   }
 }

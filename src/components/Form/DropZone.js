@@ -7,6 +7,19 @@ class DropZone extends React.Component {
     super(props);
     this.state = {tooMuchSizeFile: false};
     this.onDrop = this.onDrop.bind(this);
+    this.hideDragDropArea = this.hideDragDropArea.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('click', this.hideDragDropArea)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.hideDragDropArea)
+  }
+
+  hideDragDropArea(e) {
+    if (e.target.closest('#dropzone') === null) this.props.hideDragDropArea();
   }
 
   onDrop(file) {
@@ -28,7 +41,7 @@ class DropZone extends React.Component {
 	  return (
 	  	<Dropzone onDrop={this.onDrop} noClick noKeyboard>
         {({getRootProps, getInputProps}) => (
-          <div {...getRootProps({className: 'dropzone'})}>
+          <div id='dropzone' {...getRootProps({className: 'dropzone'})}>
             <input {...getInputProps()} />
             {this.state.tooMuchSizeFile ? tooMuchSizeMessage : acceptFilesMessage}
           </div>
@@ -39,7 +52,8 @@ class DropZone extends React.Component {
 }
 
 DropZone.propTypes = {
-  onDrop: PropTypes.func
+  onDrop: PropTypes.func,
+  hideDragDropArea: PropTypes.func
 };
 
 export default DropZone;

@@ -10,8 +10,8 @@ class App extends Component {
         <div className='logo main__block'>
           <img src='../img/logo.svg' alt='logo' className='logo__img'/>
         </div>
-        <Form/>
-        <Messages/>
+        <Form mixClass='main__block'/>
+        <Messages mixClass='main__block'/>
       </div>
     );
   }
