@@ -52,7 +52,7 @@ class Form extends React.Component {
           messageSubject: data.letter.subject,
           status: 0
         });
-        setInterval(() => this._updateStatusMessage(res['track.id']), 10000)
+        this._updateStatusMessage(res['track.id']);
       });
     })
   }
@@ -76,9 +76,13 @@ class Form extends React.Component {
   }
 
   _updateStatusMessage(id) {
-    this.sendsay.request({'action': 'track.get', 'id': id, 'session': 'session'}).then((result) => {
-      this.props.updateMessage(id, parseInt(result.obj.status));
-    })
+    const SENDING_PROCESS_STATUS = -1;
+    setTimeout(() => {
+      this.sendsay.request({'action': 'track.get', 'id': id, 'session': 'session'}).then((result) => {
+        this.props.updateMessage(id, parseInt(result.obj.status));
+        if (result.obj.status > SENDING_PROCESS_STATUS) this._updateStatusMessage(id);
+      });
+    }, 15000);
   }
 
   _createDateForSend(files) {
