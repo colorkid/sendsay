@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MessageStatus from "./MessageStatus";
 
-const Message = React.memo(function Message(props) {
+const MessagesList = React.memo(function MessagesList(props) {
   const Messages =  props.messages.map(messages => {
     return <li className='messages-list__item' key={messages.id}>
       <div className='messages-list__date'>{messages.date}</div>
@@ -13,8 +13,8 @@ const Message = React.memo(function Message(props) {
   return <ul className='messages-list'>{Messages}</ul>
 });
 
-Message.propTypes = {
+MessagesList.propTypes = {
   messages: PropTypes.array
 };
 
-export default Message;
+export default MessagesList;

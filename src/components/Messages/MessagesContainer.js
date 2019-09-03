@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Message from "./Message";
+import MessagesList from "./MessagesList";
 
-const MessagesContainer = React.memo(function MessagesList(props) {
+const MessagesContainer = React.memo(function MessagesContainer(props) {
   return <div className='messages-container'>
     <div className='messages-container__head'>
       <div className='messages-container__name-column messages-container__name-column--date'>Дата</div>
       <div className='messages-container__name-column messages-container__name-column--subject'>Тема</div>
       <div className='messages-container__name-column messages-container__name-column--status'>Статус</div>
     </div>
-    <Message messages={props.messages}/>
+    <MessagesList messages={props.messages}/>
   </div>
 });
 
