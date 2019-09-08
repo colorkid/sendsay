@@ -14,6 +14,9 @@ export const messagesReducer = (state = DEFAULT_STATE, action) => {
 };
 
 const addMessage = (state, action) => {
+  if (state.find(message => message.id === action.payload.id) !== undefined) {
+    return [...state];
+  }
   return [...state, action.payload];
 };
 

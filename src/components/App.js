@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Form from './Form/Form';
 import Messages from './Messages/Messages';
-import style from '../styles/style.scss';
+import '../styles/style.scss';
 
 class App extends Component {
   render() {

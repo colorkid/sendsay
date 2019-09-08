@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import DropZone from './DropZone';
 import FilesList from './FilesList';
 import FieldsList from './FieldsList';
-import {addNewMessage, updateMessage} from "../../redux/actions";
+import { addNewMessage, updateMessage } from "../../redux/actions";
 import 'sendsay-api';
 
 class Form extends React.Component {
@@ -33,19 +33,14 @@ class Form extends React.Component {
     this.hideDragDropArea = this.hideDragDropArea.bind(this);
   }
 
-  componentDidMount() {
-    this.sendsay = new Sendsay({
-      apiUrl: 'https://api.sendsay.ru/clu180',
-      auth: {login: 'colorkid@yandex.ru', password: 'pho2Lomux'}
-    });
-  }
-
   send() {
     if (!this._validateFields()) return false;
+    this._connectApi();
     this._createConvertedFiles().then(result => {
       const data = this._createDateForSend(result);
       this._clearState();
       this.sendsay.request(data).then(res => {
+        if (!this._checkIdenticalIds(res['track.id'])) return;
         this.props.addNewMessage({
           id: res['track.id'],
           date: new Date().toLocaleString('ru', {month: 'long', day: 'numeric'}),
@@ -55,6 +50,27 @@ class Form extends React.Component {
         this._updateStatusMessage(res['track.id']);
       });
     })
+  }
+
+  _checkIdenticalIds(id) {
+    try {
+      if (this.props.messages.find(message => message.id === id) === undefined) {
+        return true;
+      } else {
+        throw new SyntaxError('ERROR: Message with this id already exists');
+      }
+    } catch (e) {
+      console.log(e.message);
+      return false;
+    }
+  }
+
+  _connectApi() {
+    if (this.sendsay) return;
+    this.sendsay = new Sendsay({
+      apiUrl: 'https://api.sendsay.ru/clu180',
+      auth: {login: 'colorkid@yandex.ru', password: 'pho2Lomux'}
+    });
   }
 
   _clearState() {
@@ -226,7 +242,8 @@ class Form extends React.Component {
 Form.propTypes = {
   addNewMessage: PropTypes.func,
   updateMessage: PropTypes.func,
-  mixClass: PropTypes.string
+  mixClass: PropTypes.string,
+  messages: PropTypes.array
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -240,4 +257,10 @@ const mapDispatchToProps = (dispatch) => {
   }
 };
 
-export default connect(null, mapDispatchToProps)(Form);
+const mapStateToProps = (state) => {
+  return {
+    messages: state.messages
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
