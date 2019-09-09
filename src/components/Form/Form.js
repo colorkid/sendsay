@@ -4,14 +4,16 @@ import { connect } from 'react-redux';
 import DropZone from './DropZone';
 import FilesList from './FilesList';
 import FieldsList from './FieldsList';
+import { checkOnEmptyInput, checkOnValidEmail } from '../../utils/inpitValidateUtils';
+import { createConvertedFiles, getFilesSize } from '../../utils/fileUtils';
 import { addNewMessage, updateMessage } from "../../redux/actions";
 import 'sendsay-api';
 
-class Form extends React.Component {
+export class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataForm: {
+      inputsValues: {
         nameFrom: '',
         emailFrom: '',
         nameTo: '',
@@ -36,7 +38,7 @@ class Form extends React.Component {
   send() {
     if (!this._validateFields()) return false;
     this._connectApi();
-    this._createConvertedFiles().then(result => {
+    createConvertedFiles(this.state.files).then(result => {
       const data = this._createDateForSend(result);
       this._clearState();
       this.sendsay.request(data).then(res => {
@@ -75,7 +77,7 @@ class Form extends React.Component {
 
   _clearState() {
     this.setState({
-      dataForm: {
+      inputsValues: {
         nameFrom: '',
         emailFrom: '',
         nameTo: '',
@@ -105,72 +107,36 @@ class Form extends React.Component {
     return {
       'action' : 'issue.send.test',
       'letter' : {
-        'subject' : this.state.dataForm.messageSubject,
-        'from.name' : this.state.dataForm.nameFrom,
-        'from.email' : this.state.dataForm.emailFrom,
-        'to.name' : this.state.dataForm.nameTo,
-        'message': {'text' : this.state.dataForm.message},
+        'subject' : this.state.inputsValues.messageSubject,
+        'from.name' : this.state.inputsValues.nameFrom,
+        'from.email' : this.state.inputsValues.emailFrom,
+        'to.name' : this.state.inputsValues.nameTo,
+        'message': {'text' : this.state.inputsValues.message},
         'attaches': files
         },
       'sendwhen': 'test',
-      'mca': [this.state.dataForm.emailTo]
+      'mca': [this.state.inputsValues.emailTo]
       }
-  }
-
-  _checkOnEmpty(value) {
-    return value.length > 0;
-  }
-
-  _checkOnValidEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
   }
 
   _validateFields() {
     let emptyFields = [];
     let invalidEmails = [];
     const emailsForValidation = ['emailFrom', 'emailTo'];
-    Object.keys(this.state.dataForm).forEach(name => {
-      if (!this._checkOnEmpty(this.state.dataForm[name])) emptyFields.push(name);
+    Object.keys(this.state.inputsValues).forEach(name => {
+      if (!checkOnEmptyInput(this.state.inputsValues[name])) emptyFields.push(name);
       if (emailsForValidation.includes(name)) {
-        if (!this._checkOnValidEmail(this.state.dataForm[name])) invalidEmails.push(name);
+        if (!checkOnValidEmail(this.state.inputsValues[name])) invalidEmails.push(name);
       }
     });
     this.setState({emptyFields: emptyFields, invalidEmails: invalidEmails});
     return !(emptyFields.length > 0 || invalidEmails.length > 0);
   }
 
-  _createConvertedFiles() {
-    return new Promise((resolve) => {
-      const promisesFile = this.state.files.map(file => {
-        return this._convertFileToBase64(file);
-      });
-      Promise.all(promisesFile).then(result => {
-        resolve(result);
-      });
-    });
-  }
-
-  _convertFileToBase64(file) {
-    return new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        resolve({name: file.name, content: event.target.result, encoding: 'base64'});
-      };
-      reader.readAsDataURL(file)
-    });
-  }
-
-  getSizeFiles() {
-    let totalSize = 0;
-    this.state.files.forEach(item => totalSize = totalSize + item.size);
-    return totalSize;
-  }
-
   onDrop(files) {
     const MAX_ALL_FILES_SIZE = 20971520;
     const file = files[0];
-    if ((this.getSizeFiles() + file.size) <= MAX_ALL_FILES_SIZE) {
+    if ((getFilesSize(this.state.files) + file.size) <= MAX_ALL_FILES_SIZE) {
       this.setState(prevState => ({
         files: [...prevState.files, file]
       }));
@@ -201,9 +167,9 @@ class Form extends React.Component {
 
   handleInputChange(event) {
     const {name, value} = event.target;
-    const dataForm = {...this.state.dataForm};
-    dataForm[name] = value;
-    this.setState({dataForm})
+    const inputsValues = {...this.state.inputsValues};
+    inputsValues[name] = value.replace(/^\s+/g, '');
+    this.setState({inputsValues});
   }
 
   showDragDropArea(e) {
@@ -221,7 +187,7 @@ class Form extends React.Component {
       <form className={className}>
         <h1 className='form__title'>Отправлялка сообщений</h1>
         <FieldsList
-            dataForm={this.state.dataForm}
+            inputsValues={this.state.inputsValues}
             handleInputChange={this.handleInputChange}
             emptyFields={this.state.emptyFields}
             invalidEmails={this.state.invalidEmails}

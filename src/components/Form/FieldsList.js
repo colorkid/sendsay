@@ -5,7 +5,7 @@ import TextArea from "../Shared/TextArea";
 import WarningParagraph from "../Shared/WarningParagraph";
 
 const FieldsList = React.memo(function FieldsList(props) {
-  const dataForm = props.dataForm;
+  const inputsValues = props.inputsValues;
   return (
     <div className='fields-list'>
       <div className='fields-list__row'>
@@ -14,7 +14,7 @@ const FieldsList = React.memo(function FieldsList(props) {
           <Field
             name='nameFrom'
             placeholder='Имя'
-            value={dataForm.nameFrom}
+            value={inputsValues.nameFrom}
             type='text'
             handleInputChange={props.handleInputChange}
             mixClass='first'
@@ -26,7 +26,7 @@ const FieldsList = React.memo(function FieldsList(props) {
           <Field
             name='emailFrom'
             placeholder='Email'
-            value={dataForm.emailFrom}
+            value={inputsValues.emailFrom}
             type='email'
             handleInputChange={props.handleInputChange}
             mixClass='second'
@@ -43,7 +43,7 @@ const FieldsList = React.memo(function FieldsList(props) {
           <Field
             name='nameTo'
             placeholder='Имя'
-            value={dataForm.nameTo}
+            value={inputsValues.nameTo}
             type='text'
             handleInputChange={props.handleInputChange}
             mixClass='first'
@@ -55,7 +55,7 @@ const FieldsList = React.memo(function FieldsList(props) {
           <Field
             name='emailTo'
             placeholder='Email'
-            value={dataForm.emailTo}
+            value={inputsValues.emailTo}
             type='email'
             handleInputChange={props.handleInputChange}
             mixClass='second'
@@ -70,7 +70,7 @@ const FieldsList = React.memo(function FieldsList(props) {
         <span className='fields-list__title'>Тема письма</span>
         <Field
           name='messageSubject'
-          value={dataForm.messageSubject}
+          value={inputsValues.messageSubject}
           type='text'
           handleInputChange={props.handleInputChange}
         />
@@ -81,7 +81,7 @@ const FieldsList = React.memo(function FieldsList(props) {
         <span className='fields-list__title'>Сообщение</span>
         <TextArea
           name='message'
-          value={dataForm.message}
+          value={inputsValues.message}
           handleInputChange={props.handleInputChange}
         />
         {props.emptyFields.includes('message')
@@ -92,7 +92,7 @@ const FieldsList = React.memo(function FieldsList(props) {
 });
 
 FieldsList.propTypes = {
-  dataForm: PropTypes.object,
+  inputsValues: PropTypes.object,
   handleInputChange: PropTypes.func,
   emptyFields: PropTypes.array,
   invalidEmails: PropTypes.array
