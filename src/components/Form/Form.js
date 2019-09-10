@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import DropZone from './DropZone';
 import FilesList from './FilesList';
 import FieldsList from './FieldsList';
-import { checkOnEmptyInput, checkOnValidEmail } from '../../utils/inpitValidateUtils';
+import { checkOnEmptyInput, checkOnValidEmail } from '../../utils/inputValidateUtils';
 import { createConvertedFiles, getFilesSize } from '../../utils/fileUtils';
 import { addNewMessage, updateMessage } from "../../redux/actions";
 import 'sendsay-api';
@@ -51,7 +51,9 @@ export class Form extends React.Component {
         });
         this._updateStatusMessage(res['track.id']);
       });
-    })
+    }).catch((e) => {
+      console.log(e.message)
+    });
   }
 
   _checkIdenticalIds(id) {
