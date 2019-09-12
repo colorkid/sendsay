@@ -8,6 +8,7 @@ import { checkOnEmptyInput, checkOnValidEmail } from '../../utils/inputValidateU
 import { createConvertedFiles, getFilesSize } from '../../utils/fileUtils';
 import { addNewMessage, updateMessage } from "../../redux/actions";
 import 'sendsay-api';
+import WarningParagraph from "../Shared/WarningParagraph";
 
 export class Form extends React.Component {
   constructor(props) {
@@ -196,7 +197,10 @@ export class Form extends React.Component {
         />
         {this.state.files.length > 0
           && <FilesList mixClass='form__files-list' files={this.state.files} removeFile={this.removeFile}/>}
-        {this.state.isTooMuchAllFilesSize && 'Вы не можете прикрепить к письму файлов более чем на 20 Mb'}
+        {this.state.isTooMuchAllFilesSize &&
+          <WarningParagraph
+            mixClass='form__warning-paragraph'
+            message='Вы не можете прикрепить к письму файлов более чем на 20 Mb'/>}
         <div className='form__footer'>
           <button type='button' onClick={this.showDragDropArea} className='button-upload'>Прикрпепить файл</button>
           <button type='button' onClick={this.send} className='button-send'>Отправить</button>

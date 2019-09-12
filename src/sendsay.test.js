@@ -2,12 +2,6 @@ import { messagesReducer } from './redux/messagesReducer';
 import { addNewMessage, updateMessage } from "./redux/actions";
 import { checkOnEmptyInput, checkOnValidEmail } from './utils/inputValidateUtils';
 import { createConvertedFiles, getFilesSize, convertFileToBase64 } from './utils/fileUtils';
-import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import ConnectForm, { Form } from './components/Form/Form';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe('messages reducer', () => {
 
@@ -43,13 +37,12 @@ describe('messages reducer', () => {
 
 });
 
+describe('Component Form', () => {
+
+});
 
 describe('Utils', () => {
-  /* it('connect with Api', () => {
-    const wrapper = shallow(<Form />);
-    wrapper.instance()._connectApi();
-    expect(wrapper.instance().sendsay).toBeTruthy();
-  }); */
+
   describe('inputValidateUtils', () => {
 
     it('checkOnEmptyInput', () => {
