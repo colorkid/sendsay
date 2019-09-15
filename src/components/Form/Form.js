@@ -4,30 +4,16 @@ import { connect } from 'react-redux';
 import DropZone from './DropZone';
 import FilesList from './FilesList';
 import FieldsList from './FieldsList';
+import WarningParagraph from '../Shared/WarningParagraph';
 import { checkOnEmptyInput, checkOnValidEmail } from '../../utils/inputValidateUtils';
 import { createConvertedFiles, getFilesSize } from '../../utils/fileUtils';
-import { addNewMessage, updateMessage } from "../../redux/actions";
+import { addNewMessage, updateMessage } from '../../redux/actions';
 import 'sendsay-api';
-import WarningParagraph from "../Shared/WarningParagraph";
 
 export class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      inputsValues: {
-        nameFrom: '',
-        emailFrom: '',
-        nameTo: '',
-        emailTo: '',
-        messageSubject: 'Моя тема письма',
-        message: ''
-      },
-      files: [],
-      emptyFields: [],
-      invalidEmails: [],
-      isTooMuchAllFilesSize: false,
-      isVisibleDragDropArea: false
-    };
+    this.state = this.props.initialState;
     this.onDrop = this.onDrop.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.send = this.send.bind(this);
@@ -79,21 +65,7 @@ export class Form extends React.Component {
   }
 
   _clearState() {
-    this.setState({
-      inputsValues: {
-        nameFrom: '',
-        emailFrom: '',
-        nameTo: '',
-        emailTo: '',
-        messageSubject: 'Моя тема письма',
-        message: ''
-      },
-      files: [],
-      emptyFields: [],
-      invalidEmails: [],
-      isTooMuchAllFilesSize: false,
-      isVisibleDragDropArea: false
-    })
+    this.setState(this.props.initialState);
   }
 
   _updateStatusMessage(id) {
@@ -215,7 +187,8 @@ Form.propTypes = {
   addNewMessage: PropTypes.func,
   updateMessage: PropTypes.func,
   mixClass: PropTypes.string,
-  messages: PropTypes.array
+  messages: PropTypes.array,
+  initialState: PropTypes.object
 };
 
 const mapDispatchToProps = (dispatch) => {

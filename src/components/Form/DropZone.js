@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
+import WarningParagraph from '../Shared/WarningParagraph';
 
 class DropZone extends React.Component {
   constructor(props) {
@@ -37,13 +38,14 @@ class DropZone extends React.Component {
       <h2 className='dropzone__title'>Бросайте сюда файлы, я ловлю</h2>
       <p className='dropzone__paragraph'>Мы принимаем картинки (jpg, png, gif), офисные файлы (doc, xls, pdf) и zip-архивы. Размеры файла до 5 МБ</p>
     </div>;
-    const tooMuchSizeMessage = <p>Слишком большой размер файла. Размер файл не должен превышать 5 Mb.</p>;
 	  return (
 	  	<Dropzone onDrop={this.onDrop} noClick noKeyboard>
         {({getRootProps, getInputProps}) => (
           <div id='dropzone' {...getRootProps({className: 'dropzone'})}>
             <input {...getInputProps()} />
-            {this.state.tooMuchSizeFile ? tooMuchSizeMessage : acceptFilesMessage}
+            {this.state.tooMuchSizeFile ? <WarningParagraph
+              mixClass='dropzone__warning-paragraph'
+              message='Слишком большой размер файла. Размер файл не должен превышать 5 Mb.'/> : acceptFilesMessage}
           </div>
         )}
       </Dropzone>

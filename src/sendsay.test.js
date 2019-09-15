@@ -2,6 +2,39 @@ import { messagesReducer } from './redux/messagesReducer';
 import { addNewMessage, updateMessage } from "./redux/actions";
 import { checkOnEmptyInput, checkOnValidEmail } from './utils/inputValidateUtils';
 import { createConvertedFiles, getFilesSize, convertFileToBase64 } from './utils/fileUtils';
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { act } from 'react-dom/test-utils';
+import { Form } from './components/Form/Form';
+
+let container = null;
+beforeEach(() => {
+  container = document.createElement('div');
+  document.body.appendChild(container);
+});
+
+afterEach(() => {
+  unmountComponentAtNode(container);
+  container.remove();
+  container = null;
+});
+
+const initialState = {
+  inputsValues: {
+    nameFrom: '',
+    emailFrom: '',
+    nameTo: '',
+    emailTo: '',
+    messageSubject: 'Моя тема письма',
+    message: ''
+  },
+  files: [],
+  emptyFields: [],
+  invalidEmails: [],
+  isTooMuchAllFilesSize: false,
+  isVisibleDragDropArea: false
+};
+
 
 describe('messages reducer', () => {
 
@@ -34,10 +67,6 @@ describe('messages reducer', () => {
       {id:3, status:0}
     ], updateMessage(4, 111))).toEqual([{id:1, status:2}, {id:2, status:1}, {id:3, status:0}]);
   });
-
-});
-
-describe('Component Form', () => {
 
 });
 
@@ -163,5 +192,36 @@ describe('Utils', () => {
       return expect(createConvertedFiles([fileOne,2,fileThree])).rejects.toEqual({message: 'ERROR: One of "File" is not instance of File'});
     });
 
+  });
+
+  describe('Form component', () => {
+    it('check render dropzone component', () => {
+      act(() => {
+        render(<Form initialState={initialState}/>, container);
+      });
+      expect(container.querySelector('.dropzone')).toBe(null);
+      act(() => {
+        render(<Form initialState={initialState}/>, container);
+        const buttonUpload = container.querySelector('.button-upload');
+        buttonUpload.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      expect(container.querySelector('.dropzone').getAttribute('id')).toBe('dropzone');
+      act(() => {
+        render(<Form initialState={initialState}/>, container);
+        const buttonUpload = container.querySelector('.button-upload');
+        buttonUpload.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        container.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      expect(container.querySelector('.dropzone')).toBe(null);
+    });
+
+    it('check warning message', () => {
+      act(() => {
+        render(<Form initialState={initialState}/>, container);
+        const buttonSend = container.querySelector('.button-send');
+        buttonSend.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      expect(container.querySelector('.warning-paragraph').getAttribute('class')).toBe('warning-paragraph fields-list__warning-paragraph');
+    });
   });
 });
