@@ -1,5 +1,5 @@
-# Test task from sendsay company
+# Sendsay
 
 ## Start and Build scripts
-Run - npm start;
+Run - npm start;  
 Build - npm run-script build;
