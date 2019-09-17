@@ -1,9 +1,0 @@
-# Node Modules
-/node_modules
-
-# Distribution 
-/dist
-
-/.vs
-/.history
-/.idea
