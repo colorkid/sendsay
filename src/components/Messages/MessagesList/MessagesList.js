@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MessageStatus from "./MessageStatus";
+import MessageStatus from "../MessageStatus/MessageStatus";
+import './MessagesList.scss';
 
 const MessagesList = React.memo(function MessagesList(props) {
   const Messages =  props.messages.map(messages => {

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Field from '../Shared/Field';
-import TextArea from '../Shared/TextArea';
-import WarningParagraph from '../Shared/WarningParagraph';
+import Field from '../../Shared/Field/Field';
+import TextArea from '../../Shared/TextArea/TextArea';
+import WarningParagraph from '../../Shared/WarningParagraph/WarningParagraph';
+import './FieldsList.scss';
 
 const FieldsList = React.memo(function FieldsList(props) {
   const inputsValues = props.inputsValues;

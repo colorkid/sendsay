@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './WarningParagraph.scss';
 
 const WarningParagraph = React.memo(function Field(props) {
   const className = props.mixClass ? `warning-paragraph ${props.mixClass}` : 'warning-paragraph';

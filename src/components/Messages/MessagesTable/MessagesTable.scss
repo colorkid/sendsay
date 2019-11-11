@@ -1,0 +1,22 @@
+@import "../../../styles/variables.scss";
+
+.messages-table {
+  &__head {
+    display: flex;
+    padding: 20px 0 10px 0;
+    border-bottom: 1px solid $borderColor;
+  }
+  &__name-column {
+    color: $secondTextColor;
+    &--date {
+      width: 15%;
+    }
+    &--subject {
+      width: 70%;
+    }
+    &--status {
+      width: 15%;
+      text-align: right;
+    }
+  }
+}

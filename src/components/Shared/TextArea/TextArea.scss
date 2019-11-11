@@ -1,0 +1,11 @@
+@import "../../../styles/variables.scss";
+
+.textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 10px;
+  border: 1px solid $borderColor;
+  font-size: 16px;
+  line-height: 1.5;
+  border-radius: $globalBorder;
+}

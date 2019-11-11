@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
-import WarningParagraph from '../Shared/WarningParagraph';
+import WarningParagraph from '../../Shared/WarningParagraph/WarningParagraph';
+import './DropZone.scss';
 
 class DropZone extends React.Component {
   constructor(props) {

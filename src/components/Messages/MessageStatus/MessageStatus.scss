@@ -1,0 +1,13 @@
+@import "../../../styles/variables.scss";
+
+.messages-status {
+  &--success {
+    color: rgba(3, 161, 0, 1);
+  }
+  &--error {
+    color: $accentTextColor;
+  }
+  &--loading {
+    color: $secondTextColor;
+  }
+}

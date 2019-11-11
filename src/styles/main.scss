@@ -1,0 +1,97 @@
+@import "./variables.scss";
+
+* {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  box-sizing: border-box;
+}
+
+h1, h2 {
+  width: 100%;
+  margin: 0;
+  font-weight: 400
+}
+
+::placeholder {
+  color: $secondTextColor;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  margin: 0 20px;
+  background-color: rgba(247, 247, 247, 1);
+  color: rgba(0, 0, 0, 1);
+}
+
+.button-upload {
+  height: 30px;
+  color: rgba(0, 85, 251, 1);
+  font-size: 16px;
+  background-color: transparent;
+  border-radius: $globalBorder;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding-left: 20px;
+  line-height: 50%;
+  background-size: 16px;
+  background-position: 0 8px;
+  background-image: url('../resources/img/clip.svg');
+  background-repeat: no-repeat;
+  &:focus {
+    border-color: rgba(69, 165, 255, 1);
+  }
+}
+
+.button-send {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 40px;
+  font-size: 18px;
+  color: #FFFFFF;
+  border: 0;
+  background: linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;;
+  border-radius: $globalBorder;
+  cursor: pointer;
+  &:hover {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
+      linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;;
+  }
+  &:active {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+      linear-gradient(180deg, #45A6FF 0%, #0055FB 100%), #C4C4C4;
+  }
+  &:disabled {
+    background: linear-gradient(0deg, #C4C4C4, #C4C4C4), linear-gradient(180deg, #45A6FF 0%, #0055FB 100%);
+  }
+}
+
+.main {
+  max-width: 800px;
+  padding: 20px 0;
+  &__block {
+    margin: 20px 0;
+  }
+}
+
+.logo {
+  font-size: 0;
+}
+
+@media (max-width: 768px) {
+  body {
+    margin: 0;
+  }
+
+  .logo {
+    margin: 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  h1, h2 {
+    font-size: 22px;
+  }
+}

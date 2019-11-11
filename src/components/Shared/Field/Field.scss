@@ -1,0 +1,22 @@
+@import "../../../styles/variables.scss";
+
+.input {
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid $borderColor;
+  font-size: 18px;
+  border-radius: $globalBorder;
+  &--first {
+    border-radius: $globalBorder 0 0 $globalBorder;
+  }
+  &--second {
+    border-radius: 0 $globalBorder $globalBorder 0;
+    border-left: 0;
+  }
+  &:focus {
+    &::placeholder {
+      opacity: 0;
+    }
+  }
+}

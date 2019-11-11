@@ -1,0 +1,49 @@
+@import "../../../styles/variables.scss";
+
+.messages-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  &__item {
+    display: flex;
+    line-height: 35px;
+  }
+  &__date {
+    width: 15%;
+  }
+  &__subject {
+    width: 70%;
+    max-width: 520px;
+    height: 35px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &__status {
+    width: 15%;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .messages-list {
+    &__item {
+      flex-wrap: wrap;
+      justify-content: center;
+      border-top: 1px solid $borderColor;
+      text-align: center;
+    }
+    &__date {
+      width: 100%;
+    }
+    &__status {
+      width: 100%;
+      text-align: center;
+    }
+    &__subject {
+      width: 100%;
+      white-space: normal;
+    }
+  }
+}

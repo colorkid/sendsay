@@ -1,19 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import DropZone from './DropZone';
-import FilesList from './FilesList';
-import FieldsList from './FieldsList';
-import WarningParagraph from '../Shared/WarningParagraph';
-import { checkOnEmptyInput, checkOnValidEmail } from '../../utils/inputValidateUtils';
-import { createConvertedFiles, getFilesSize } from '../../utils/fileUtils';
-import { addNewMessage, updateMessage } from '../../redux/actions';
+import DropZone from '../Dropzone/DropZone';
+import FilesList from '../FilesList/FilesList';
+import FieldsList from '../FieldsList/FieldsList';
+import WarningParagraph from '../../Shared/WarningParagraph/WarningParagraph';
+import { checkOnEmptyInput, checkOnValidEmail } from '../../../utils/inputValidateUtils';
+import { createConvertedFiles, getFilesSize } from '../../../utils/fileUtils';
+import { addNewMessage, updateMessage } from '../../../redux/actions';
 import 'sendsay-api';
+import './FormContainer.scss';
 
-export class Form extends React.Component {
+export class FormContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.props.initialState;
+    this.state = {
+      inputsValues: {
+        nameFrom: '',
+        emailFrom: '',
+        nameTo: '',
+        emailTo: '',
+        messageSubject: 'Моя тема письма',
+        message: ''
+      },
+      files: [],
+      emptyFields: [],
+      invalidEmails: [],
+      isTooMuchAllFilesSize: false,
+      isVisibleDragDropArea: false,
+    };
+    this.baseState = this.state;
     this.onDrop = this.onDrop.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.send = this.send.bind(this);
@@ -29,14 +45,14 @@ export class Form extends React.Component {
       const data = this._createDateForSend(result);
       this._clearState();
       this.sendsay.request(data).then(res => {
-        if (!this._checkIdenticalIds(res['track.id'])) return;
+        if (this._checkIdenticalIds(res['track.id'])) return;
         this.props.addNewMessage({
           id: res['track.id'],
           date: new Date().toLocaleString('ru', {month: 'long', day: 'numeric'}),
           messageSubject: data.letter.subject,
           status: 0
         });
-        this._updateStatusMessage(res['track.id']);
+        this._updateStatusMessage(res['track.id'])
       });
     }).catch((e) => {
       console.log(e.message)
@@ -44,28 +60,19 @@ export class Form extends React.Component {
   }
 
   _checkIdenticalIds(id) {
-    try {
-      if (this.props.messages.find(message => message.id === id) === undefined) {
-        return true;
-      } else {
-        throw new SyntaxError('ERROR: Message with this id already exists');
-      }
-    } catch (e) {
-      console.log(e.message);
-      return false;
-    }
+    return this.props.messages.find(message => message.id === id)
   }
 
   _connectApi() {
     if (this.sendsay) return;
     this.sendsay = new Sendsay({
       apiUrl: 'https://api.sendsay.ru/clu180',
-      auth: {login: 'colorkid@yandex.ru', password: 'pho2Lomux'}
+      auth: {login: 'colorkid@yandex.ru', password: 'Superior1'}
     });
   }
 
   _clearState() {
-    this.setState(this.props.initialState);
+    this.setState(this.baseState);
   }
 
   _updateStatusMessage(id) {
@@ -183,12 +190,11 @@ export class Form extends React.Component {
   }
 }
 
-Form.propTypes = {
+FormContainer.propTypes = {
   addNewMessage: PropTypes.func,
   updateMessage: PropTypes.func,
   mixClass: PropTypes.string,
-  messages: PropTypes.array,
-  initialState: PropTypes.object
+  messages: PropTypes.array
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -208,4 +214,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form);
+export default connect(mapStateToProps, mapDispatchToProps)(FormContainer);

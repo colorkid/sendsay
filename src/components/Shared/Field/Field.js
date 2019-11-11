@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import './Field.scss';
 
 const Field = React.memo(function Field(props) {
   const className = props.mixClass ? `input input--${props.mixClass}` : 'input';

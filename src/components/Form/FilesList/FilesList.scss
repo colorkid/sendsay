@@ -1,0 +1,58 @@
+@import "../../../styles/variables.scss";
+
+.files-list {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px 0 60px;
+    width: calc(50% - 5px);
+    height: 50px;
+    margin: 5px 0;
+    border-radius: $globalBorder;
+    border: 1px solid $borderColor;
+    background-image: url('../../../resources/img/bigClip.svg');
+    background-position: 10px 50%;
+    background-size: 32px auto;
+    background-repeat: no-repeat;
+  }
+  &__name {
+    max-width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &__remove-button {
+    cursor: pointer;
+    padding-left: 18px;
+    color: $accentTextColor;
+    background-image: url('../../../resources/img/trash.svg');
+    background-position: 0 50%;
+    background-size: 13px auto;
+    background-repeat: no-repeat;
+  }
+}
+
+@media (max-width: 768px) {
+  .files-list {
+    &__item {
+      width: 100%;
+    }
+    &__name {
+      max-width: 260px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .files-list {
+    &__name {
+      max-width: 100px;
+    }
+  }
+}

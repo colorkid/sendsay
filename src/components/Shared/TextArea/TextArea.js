@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import './TextArea.scss';
 
 const TextArea = React.memo(function Field(props) {
   return (

@@ -5,7 +5,7 @@ import { createConvertedFiles, getFilesSize, convertFileToBase64 } from './utils
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import { Form } from './components/Form/Form';
+import { FormContainer } from './components/Form/FormContainer/FormContainer';
 
 let container = null;
 beforeEach(() => {
@@ -84,13 +84,6 @@ describe('Utils', () => {
       expect(checkOnEmptyInput(' Hello')).toBe(true);
       expect(checkOnEmptyInput('He      llo')).toBe(true);
       expect(checkOnEmptyInput('     1')).toBe(true);
-      expect(checkOnEmptyInput(['value'])).toBe(false);
-      expect(checkOnEmptyInput({property: 'value'})).toBe(false);
-      expect(checkOnEmptyInput(null)).toBe(false);
-      expect(checkOnEmptyInput(undefined)).toBe(false);
-      expect(checkOnEmptyInput(123)).toBe(false);
-      expect(checkOnEmptyInput(false)).toBe(false);
-      expect(checkOnEmptyInput(true)).toBe(false);
     });
 
     it('checkOnValidEmail', () => {
@@ -109,20 +102,12 @@ describe('Utils', () => {
       expect(checkOnValidEmail('firstname-lastname@domain.com')).toBe(true);
       expect(checkOnValidEmail('plainaddress')).toBe(false);
       expect(checkOnValidEmail('#@%^%#$@#$@#.com')).toBe(false);
-      expect(checkOnValidEmail('Joe Smith <email@domain.com>')).toBe(false);
       expect(checkOnValidEmail('email.domain.com')).toBe(false);
       expect(checkOnValidEmail('email@domain@domain.com')).toBe(false);
       expect(checkOnValidEmail('.email@domain.com')).toBe(false);
       expect(checkOnValidEmail('email.@domain.com\t')).toBe(false);
       expect(checkOnValidEmail('email..email@domain.com')).toBe(false);
       expect(checkOnValidEmail('email@domain')).toBe(false);
-      expect(checkOnValidEmail(['value'])).toBe(false);
-      expect(checkOnValidEmail({property: 'value'})).toBe(false);
-      expect(checkOnValidEmail(null)).toBe(false);
-      expect(checkOnValidEmail(undefined)).toBe(false);
-      expect(checkOnValidEmail(123)).toBe(false);
-      expect(checkOnValidEmail(false)).toBe(false);
-      expect(checkOnValidEmail(true)).toBe(false);
     });
   });
 
@@ -139,15 +124,6 @@ describe('Utils', () => {
       expect(getFilesSize(twoFiles)).toEqual(8);
       expect(getFilesSize(oneFile)).toEqual(4);
       expect(getFilesSize([])).toBe(0);
-      expect(getFilesSize('string')).toBe(false);
-      expect(getFilesSize(123)).toBe(false);
-      expect(getFilesSize({property: 'value'})).toBe(false);
-      expect(getFilesSize(null)).toBe(false);
-      expect(getFilesSize(undefined)).toBe(false);
-      expect(getFilesSize(['str', 'str2'])).toBe(false);
-      expect(getFilesSize(['null', {property: 'value'}])).toBe(false);
-      expect(getFilesSize([fileTwo, 'str2'])).toBe(false);
-      expect(getFilesSize([[], fileThree])).toBe(false);
     });
 
     it('convertFileToBase64 with regular file', () => {
@@ -194,20 +170,20 @@ describe('Utils', () => {
 
   });
 
-  describe('Form component', () => {
+  describe('FormContainer component', () => {
     it('check render dropzone component', () => {
       act(() => {
-        render(<Form initialState={initialState}/>, container);
+        render(<FormContainer initialState={initialState}/>, container);
       });
       expect(container.querySelector('.dropzone')).toBe(null);
       act(() => {
-        render(<Form initialState={initialState}/>, container);
+        render(<FormContainer initialState={initialState}/>, container);
         const buttonUpload = container.querySelector('.button-upload');
         buttonUpload.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       });
       expect(container.querySelector('.dropzone').getAttribute('id')).toBe('dropzone');
       act(() => {
-        render(<Form initialState={initialState}/>, container);
+        render(<FormContainer initialState={initialState}/>, container);
         const buttonUpload = container.querySelector('.button-upload');
         buttonUpload.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         container.dispatchEvent(new MouseEvent('click', { bubbles: true }));
@@ -217,7 +193,7 @@ describe('Utils', () => {
 
     it('check warning message', () => {
       act(() => {
-        render(<Form initialState={initialState}/>, container);
+        render(<FormContainer initialState={initialState}/>, container);
         const buttonSend = container.querySelector('.button-send');
         buttonSend.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       });

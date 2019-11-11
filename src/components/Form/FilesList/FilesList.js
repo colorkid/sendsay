@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './FilesList.scss';
 
 const FilesList = React.memo(function ListFiles(props) {
   const className = props.mixClass ? `files-list ${props.mixClass}` : 'files-list';
